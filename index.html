@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartMart | Electronics Superstore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              light: '#6366f1',
+              dark: '#818cf8'
+            },
+            secondary: {
+              light: '#f43f5e',
+              dark: '#fb7185'
+            },
+            dark: {
+              900: '#0f172a',
+              800: '#1e293b',
+              700: '#334155',
+              600: '#475569'
+            }
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'float-reverse': 'float-reverse 6s ease-in-out infinite',
+            'pulse-slow': 'pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'spin-slow': 'spin 8s linear infinite'
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+            'float-reverse': {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(20px)' },
+            }
+          }
+        }
+      }
+    }
+    // Add a wishlist button, so when it is clicked, it shows the product to a wishlist array
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    * {
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.2s, transform 0.3s;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .gradient-text {
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      background-image: linear-gradient(90deg, #6366f1, #f43f5e);
+    }
+
+    .product-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.05);
+    }
+
+    .product-image {
+      transition: transform 0.5s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+    }
+
+    .blob {
+      filter: blur(60px);
+      opacity: 0.6;
+      z-index: -1;
+    }
+
+    .nav-link::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: currentColor;
+      transition: width 0.3s;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .cart-item {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .dark .gradient-text {
+      background-image: linear-gradient(90deg, #818cf8, #fb7185);
+    }
+
+    .dark .blob {
+      opacity: 0.3;
+    }
+
+    .hero-pattern {
+      background-image: radial-gradient(circle, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .dark .hero-pattern {
+      background-image: radial-gradient(circle, rgba(129, 140, 248, 0.1) 1px, transparent 1px);
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 0.5rem;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .dark .modal-content {
+      background-color: #1e293b;
+    }
+
+    /* Payment method selection */
+    .payment-method {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .payment-method:hover {
+      border-color: #6366f1;
+    }
+
+    .payment-method.selected {
+      border-color: #6366f1;
+      background-color: #f8fafc;
+    }
+
+    .dark .payment-method.selected {
+      background-color: #334155;
+    }
+
+    .payment-method input {
+      margin-right: 1rem;
+    }
+
+    /* Form styles */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.5rem;
+      transition: border-color 0.3s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #6366f1;
+    }
+
+    .dark .form-input {
+      background-color: #334155;
+      border-color: #475569;
+      color: white;
+    }
+
+    /* Success modal */
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background-color: #10b981;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    
+    /* Payment slip styles */
+    .payment-slip {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: 0 auto;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .payment-slip-header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+    
+    .payment-slip-details {
+      margin-bottom: 20px;
+    }
+    
+    .payment-slip-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    
+    .payment-slip-total {
+      border-top: 1px dashed #e2e8f0;
+      padding-top: 15px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    
+    .payment-slip-footer {
+      text-align: center;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 12px;
+      color: #64748b;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 dark:bg-dark-900 dark:text-gray-100 min-h-screen">
+  <!-- Blob background elements -->
+  <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+    <div
+      class="blob bg-primary-light dark:bg-primary-dark w-80 h-80 rounded-full absolute top-1/4 -left-20 animate-float">
+    </div>
+    <div
+      class="blob bg-secondary-light dark:bg-secondary-dark w-96 h-96 rounded-full absolute bottom-1/4 -right-20 animate-float-reverse">
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-dark-900/80 shadow-sm">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <div class="w-10 h-10 rounded-full bg-primary-light dark:bg-primary-dark flex items-center justify-center">
+            <i class="fas fa-tv text-white text-xl"></i>
+          </div>
+          <span class="text-2xl font-bold gradient-text">SmartMart</span>
+        </div>
+
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#" class="nav-link font-medium">Home</a>
+          <a href="#shop" class="nav-link font-medium">Shop</a>
+          <a href="#collections" class="nav-link font-medium">Categories</a>
+          <a href="#features" class="nav-link font-medium">Features</a>
+          <a href="#testimonials" class="nav-link font-medium">Reviews</a>
+        </nav>
+
+        <div class="flex items-center gap-2 ml-5">
+          <button id="theme-toggle"
+            class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-800">
+            <i class="fas fa-moon dark:hidden"></i>
+            <i class="fas fa-sun hidden dark:block"></i>
+          </button>
+
+          <button id="wishlist-toggle" class="wishlist-btn w-10 h-10 rounded-full bg-white dark:bg-dark-700 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-600" data-id="2"><i class="fas fa-heart"></i></button>
+
+          <button id="cart-toggle"
+            class="relative w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-800">
+            <i class="fas fa-shopping-bag"></i>
+            <span id="cart-count"
+              class="absolute -top-1 -right-1 bg-secondary-light dark:bg-secondary-dark text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</span>
+          </button>
+
+          <button
+            class="md:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-800">
+            <i class="fas fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-pattern relative overflow-hidden">
+    <div class="container mx-auto px-6 py-20 md:py-32">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-12 md:mb-0">
+          <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
+            Premium <span class="gradient-text">Electronics</span> at Smart Prices
+          </h1>
+          <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-lg">
+            Discover the latest TVs, smartwatches, home electronics and more with unbeatable prices and fast delivery.
+          </p>
+          <div class="flex space-x-4">
+            <button id="shop-now-btn"
+              class="px-8 py-3 bg-primary-light dark:bg-primary-dark text-white rounded-full font-medium hover:opacity-90 transform hover:scale-105 shadow-lg">
+              Shop Now
+            </button>
+            <button id="explore-btn"
+              class="px-8 py-3 border-2 border-gray-300 dark:border-dark-700 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-dark-800 transform hover:scale-105">
+              Explore
+            </button>
+          </div>
+        </div>
+        <div class="md:w-1/2 relative">
+          <div class="relative">
+            <img
+              src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1201&q=80"
+              alt="Smart Devices"
+              class="w-full max-w-md mx-auto rounded-2xl shadow-2xl border-8 border-white dark:border-dark-800 animate-float">
+            <div class="absolute -bottom-6 -left-6 bg-white dark:bg-dark-800 p-4 rounded-xl shadow-lg">
+              <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                <span class="text-sm font-medium">In stock</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Categories -->
+  <section id="collections" class="py-16 bg-white dark:bg-dark-900">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-12 text-center">Shop by Category</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div
+          class="category-card bg-gray-50 dark:bg-dark-800 rounded-2xl p-6 text-center group cursor-pointer hover:bg-primary-light dark:hover:bg-primary-dark hover:text-white transform hover:-translate-y-2"
+          data-category="tvs">
+          <div
+            class="w-20 h-20 mx-auto mb-4 bg-white dark:bg-dark-700 rounded-full flex items-center justify-center group-hover:bg-white/20">
+            <i class="fas fa-tv text-3xl text-primary-light dark:text-primary-dark group-hover:text-white"></i>
+          </div>
+          <h3 class="font-semibold">TVs</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-white/80">50+ Models</p>
+        </div>
+        <div
+          class="category-card bg-gray-50 dark:bg-dark-800 rounded-2xl p-6 text-center group cursor-pointer hover:bg-secondary-light dark:hover:bg-secondary-dark hover:text-white transform hover:-translate-y-2"
+          data-category="smartwatches">
+          <div
+            class="w-20 h-20 mx-auto mb-4 bg-white dark:bg-dark-700 rounded-full flex items-center justify-center group-hover:bg-white/20">
+            <i class="fas fa-clock text-3xl text-secondary-light dark:text-secondary-dark group-hover:text-white"></i>
+          </div>
+          <h3 class="font-semibold">Smartwatches</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-white/80">30+ Brands</p>
+        </div>
+        <div
+          class="category-card bg-gray-50 dark:bg-dark-800 rounded-2xl p-6 text-center group cursor-pointer hover:bg-yellow-500 dark:hover:bg-yellow-500 hover:text-white transform hover:-translate-y-2"
+          data-category="audio">
+          <div
+            class="w-20 h-20 mx-auto mb-4 bg-white dark:bg-dark-700 rounded-full flex items-center justify-center group-hover:bg-white/20">
+            <i class="fas fa-headphones text-3xl text-yellow-500 group-hover:text-white"></i>
+          </div>
+          <h3 class="font-semibold">Audio</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-white/80">120+ Products</p>
+        </div>
+        <div
+          class="category-card bg-gray-50 dark:bg-dark-800 rounded-2xl p-6 text-center group cursor-pointer hover:bg-green-500 dark:hover:bg-green-500 hover:text-white transform hover:-translate-y-2"
+          data-category="smart-home">
+          <div
+            class="w-20 h-20 mx-auto mb-4 bg-white dark:bg-dark-700 rounded-full flex items-center justify-center group-hover:bg-white/20">
+            <i class="fas fa-home text-3xl text-green-500 group-hover:text-white"></i>
+          </div>
+          <h3 class="font-semibold">Smart Home</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-white/80">80+ Devices</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trending Products -->
+  <section id="shop" class="py-16 bg-gray-50 dark:bg-dark-800">
+    <div class="container mx-auto px-6">
+      <div class="flex justify-between items-center mb-12">
+        <h2 class="text-3xl font-bold">Trending Electronics</h2>
+        <button id="view-all-btn"
+          class="flex items-center space-x-2 text-primary-light dark:text-primary-dark font-medium">
+          <span>View All</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Product 1 -->
+        <div class="product-card bg-white dark:bg-dark-900 rounded-xl overflow-hidden shadow-md hover:shadow-xl"
+          data-id="1" data-name="Quantum X Earbuds" data-price="89.99" data-oldprice="112.99">
+          <div class="relative overflow-hidden h-60">
+            <img
+              src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80"
+              alt="Wireless Earbuds" class="product-image w-full h-full object-cover">
+            <div class="absolute top-4 right-4">
+              <button
+                class="wishlist-btn w-10 h-10 rounded-full bg-white dark:bg-dark-700 flex items-center justify-center shadow-md hover:bg-gray-100 dark:hover:bg-dark-600"
+                data-id="1">
+                <i class="far fa-heart text-gray-600 dark:text-gray-300"></i>
+              </button>
+            </div>
+            <div
+              class="absolute bottom-4 left-4 bg-primary-light dark:bg-primary-dark text-white px-3 py-1 rounded-full text-xs font-medium">
+              -20% OFF
+            </div>
+          </div>
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-semibold">Quantum X Earbuds</h3>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <span class="text-sm ml-1">4.8</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Noise cancelling wireless earbuds</p>
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-primary-light dark:text-primary-dark font-bold">$89.99</span>
+                <span class="text-sm text-gray-400 line-through ml-2">$112.99</span>
+              </div>
+              <button
+                class="add-to-cart-btn w-8 h-8 rounded-full bg-gray-100 dark:bg-dark-700 flex items-center justify-center hover:bg-primary-light dark:hover:bg-primary-dark hover:text-white">
+                <i class="fas fa-plus text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="product-card bg-white dark:bg-dark-900 rounded-xl overflow-hidden shadow-md hover:shadow-xl"
+          data-id="2" data-name="Ultra HD Smart TV" data-price="899.99">
+          <div class="relative overflow-hidden h-60">
+            <img
+              src="https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+              alt="Smart TV" class="product-image w-full h-full object-cover">
+            <div class="absolute top-4 right-4">
+              <button
+                class="wishlist-btn w-10 h-10 rounded-full bg-white dark:bg-dark-700 flex items-center justify-center shadow-md hover:bg-gray-100 dark:hover:bg-dark-600"
+                data-id="2">
+                <i class="far fa-heart text-gray-600 dark:text-gray-300"></i>
+              </button>
+            </div>
+          </div>
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-semibold">Ultra HD Smart TV</h3>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <span class="text-sm ml-1">4.9</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">65" 4K HDR Smart Television</p>
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-primary-light dark:text-primary-dark font-bold">$899.99</span>
+              </div>
+              <button
+                class="add-to-cart-btn w-8 h-8 rounded-full bg-gray-100 dark:bg-dark-700 flex items-center justify-center hover:bg-primary-light dark:hover:bg-primary-dark hover:text-white">
+                <i class="fas fa-plus text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 3 -->
+        <div class="product-card bg-white dark:bg-dark-900 rounded-xl overflow-hidden shadow-md hover:shadow-xl"
+          data-id="3" data-name="Horizon Pro Laptop" data-price="1299.99">
+          <div class="relative overflow-hidden h-60">
+            <img
+              src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80"
+              alt="Laptop" class="product-image w-full h-full object-cover">
+            <div class="absolute top-4 right-4">
+              <button
+                class="wishlist-btn w-10 h-10 rounded-full bg-white dark:bg-dark-700 flex items-center justify-center shadow-md hover:bg-gray-100 dark:hover:bg-dark-600"
+                data-id="3">
+                <i class="fas fa-heart text-secondary-light dark:text-secondary-dark"></i>
+              </button>
+            </div>
+            <div
+              class="absolute bottom-4 left-4 bg-secondary-light dark:bg-secondary-dark text-white px-3 py-1 rounded-full text-xs font-medium">
+              NEW
+            </div>
+          </div>
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-semibold">Horizon Pro Laptop</h3>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <span class="text-sm ml-1">4.7</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">16GB RAM • 1TB SSD • RTX 4060</p>
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-primary-light dark:text-primary-dark font-bold">$1,299.99</span>
+              </div>
+              <button
+                class="add-to-cart-btn w-8 h-8 rounded-full bg-gray-100 dark:bg-dark-700 flex items-center justify-center hover:bg-primary-light dark:hover:bg-primary-dark hover:text-white">
+                <i class="fas fa-plus text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product 4 -->
+        <div class="product-card bg-white dark:bg-dark-900 rounded-xl overflow-hidden shadow-md hover:shadow-xl"
+          data-id="4" data-name="Smart Home Hub" data-price="249.99" data-oldprice="299.99">
+          <div class="relative overflow-hidden h-60">
+            <img
+              src="https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+              alt="Smart Home Hub" class="product-image w-full h-full object-cover">
+            <div class="absolute top-4 right-4">
+              <button
+                class="wishlist-btn w-10 h-10 rounded-full bg-white dark:bg-dark-700 flex items-center justify-center shadow-md hover:bg-gray-100 dark:hover:bg-dark-600"
+                data-id="4">
+                <i class="far fa-heart text-gray-600 dark:text-gray-300"></i>
+              </button>
+            </div>
+          </div>
+          <div class="p-4">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-semibold">Smart Home Hub</h3>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <span class="text-sm ml-1">4.6</span>
+              </div>
+            </div>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">Control all your smart devices in one place</p>
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-primary-light dark:text-primary-dark font-bold">$249.99</span>
+                <span class="text-sm text-gray-400 line-through ml-2">$299.99</span>
+              </div>
+              <button
+                class="add-to-cart-btn w-8 h-8 rounded-full bg-gray-100 dark:bg-dark-700 flex items-center justify-center hover:bg-primary-light dark:hover:bg-primary-dark hover:text-white">
+                <i class="fas fa-plus text-xs"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="py-16 bg-white dark:bg-dark-900">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-12 text-center">Why Choose SmartMart</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-gray-50 dark:bg-dark-800 p-8 rounded-2xl hover:shadow-lg transform hover:-translate-y-2">
+          <div
+            class="w-16 h-16 bg-primary-light/10 dark:bg-primary-dark/10 rounded-xl flex items-center justify-center mb-6">
+            <i class="fas fa-truck text-primary-light dark:text-primary-dark text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Fast & Free Shipping</h3>
+          <p class="text-gray-600 dark:text-gray-400">Enjoy free shipping on all orders over $50 with delivery in 2-3 business days.</p>
+        </div>
+        <div class="bg-gray-50 dark:bg-dark-800 p-8 rounded-2xl hover:shadow-lg transform hover:-translate-y-2">
+          <div
+            class="w-16 h-16 bg-secondary-light/10 dark:bg-secondary-dark/10 rounded-xl flex items-center justify-center mb-6">
+            <i class="fas fa-shield-alt text-secondary-light dark:text-secondary-dark text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Extended Warranty</h3>
+          <p class="text-gray-600 dark:text-gray-400">All products come with extended warranty options for your peace of mind.</p>
+        </div>
+        <div class="bg-gray-50 dark:bg-dark-800 p-8 rounded-2xl hover:shadow-lg transform hover:-translate-y-2">
+          <div class="w-16 h-16 bg-green-500/10 rounded-xl flex items-center justify-center mb-6">
+            <i class="fas fa-undo text-green-500 text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-semibold mb-3">Easy Returns</h3>
+          <p class="text-gray-600 dark:text-gray-400">30-day hassle-free returns on all products, no questions asked.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Support Banner -->
+  <section
+    class="py-16 bg-gradient-to-r from-primary-light to-secondary-light dark:from-primary-dark dark:to-secondary-dark">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-8 md:mb-0">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Expert Tech Support</h2>
+          <p class="text-white/90 mb-6 max-w-lg">Our certified technicians are available 24/7 to help you with setup, troubleshooting, and any questions about your new devices.</p>
+          <button id="support-btn"
+            class="px-6 py-3 bg-white text-primary-light dark:text-primary-dark rounded-full font-medium flex items-center space-x-2 hover:bg-gray-100 transform hover:scale-105">
+            <i class="fas fa-headset"></i>
+            <span>Contact Support</span>
+          </button>
+        </div>
+        <div class="md:w-1/2 relative">
+          <div class="relative max-w-md mx-auto">
+            <img
+              src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+              alt="Tech Support" class="rounded-2xl shadow-2xl border-8 border-white">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="py-16 bg-gray-50 dark:bg-dark-800">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-12 text-center">Customer Reviews</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white dark:bg-dark-900 p-6 rounded-2xl shadow-sm hover:shadow-md">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Customer"
+                class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-medium">Itz Nat</h4>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-400">"The TV I ordered arrived so fast, I think it used teleportation. Now I’m drowning in 4K."</p>
+        </div>
+        <div class="bg-white dark:bg-dark-900 p-6 rounded-2xl shadow-sm hover:shadow-md">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer"
+                class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-medium">Kirito Natus</h4>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-400">"I was scared to buy electronics online. But SmartMart surprised me! Not only did it actually turn on, but their support team is so helpful."</p>
+        </div>
+        <div class="bg-white dark:bg-dark-900 p-6 rounded-2xl shadow-sm hover:shadow-md">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Customer"
+                class="w-full h-full object-cover">
+            </div>
+            <div>
+              <h4 class="font-medium">Andreya Davina</h4>
+              <div class="flex items-center">
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star text-yellow-400 text-sm"></i>
+                <i class="fas fa-star-half-alt text-yellow-400 text-sm"></i>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-400">"Great prices and fast shipping. The smartwatch I bought was exactly as described and works perfectly with my phone."</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="py-16 bg-white dark:bg-dark-900">
+    <div class="container mx-auto px-6 max-w-4xl text-center">
+      <div class="bg-gray-50 dark:bg-dark-800 rounded-2xl p-8 md:p-12 shadow-sm">
+        <h2 class="text-3xl font-bold mb-4">Stay Updated</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">Subscribe to our newsletter for exclusive deals, new product announcements, and tech tips.</p>
+        <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <input type="email" id="newsletter-email" placeholder="Your email address"
+            class="flex-grow px-4 py-3 rounded-full border border-gray-300 dark:border-dark-700 focus:outline-none focus:ring-2 focus:ring-primary-light dark:focus:ring-primary-dark bg-white dark:bg-dark-900">
+          <button id="subscribe-btn"
+            class="px-6 py-3 bg-primary-light dark:bg-primary-dark text-white rounded-full font-medium hover:opacity-90 transform hover:scale-105">
+            Subscribe
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark-900 text-gray-300 py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center space-x-2 mb-4">
+            <div class="w-10 h-10 rounded-full bg-primary-dark flex items-center justify-center">
+              <i class="fas fa-tv text-white text-xl"></i>
+            </div>
+            <span class="text-2xl font-bold text-white">SmartMart</span>
+          </div>
+          <p class="mb-4">Your trusted source for premium electronics.</p>
+          <div class="flex space-x-4">
+            <a href="#"
+              class="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center hover:bg-primary-dark">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#"
+              class="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center hover:bg-primary-dark">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#"
+              class="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center hover:bg-primary-dark">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#"
+              class="w-10 h-10 rounded-full bg-dark-800 flex items-center justify-center hover:bg-primary-dark">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-white font-medium mb-4">Shop</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">All Products</a></li>
+            <li><a href="#" class="hover:text-white">TVs & Home Theater</a></li>
+            <li><a href="#" class="hover:text-white">Computers & Tablets</a></li>
+            <li><a href="#" class="hover:text-white">Smartwatches</a></li>
+            <li><a href="#" class="hover:text-white">Audio Devices</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-white font-medium mb-4">Support</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">Contact Us</a></li>
+            <li><a href="#" class="hover:text-white">FAQs</a></li>
+            <li><a href="#" class="hover:text-white">Shipping Policy</a></li>
+            <li><a href="#" class="hover:text-white">Returns & Warranty</a></li>
+            <li><a href="#" class="hover:text-white">Product Manuals</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-white font-medium mb-4">Company</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-white">About Us</a></li>
+            <li><a href="#" class="hover:text-white">Careers</a></li>
+            <li><a href="#" class="hover:text-white">Blog</a></li>
+            <li><a href="#" class="hover:text-white">Press</a></li>
+            <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-dark-700 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p>© 2025 SmartMart. All rights reserved.</p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/visa/visa-original.svg" class="h-8" alt="Visa">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mastercard/mastercard-original.svg" class="h-8"
+            alt="Mastercard">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg" class="h-8"
+            alt="Apple Pay">
+          <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" class="h-8"
+            alt="Google Pay">
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Shopping Cart Sidebar -->
+  <div id="cart-sidebar"
+    class="fixed top-0 right-0 h-full w-full md:w-96 bg-white dark:bg-dark-800 shadow-xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+    <div class="p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Your Cart (<span id="cart-count-display">3</span>)</h2>
+        <button id="cart-close"
+          class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div id="cart-items" class="space-y-4 mb-6">
+        <!-- Cart Item 1 -->
+        <div class="cart-item flex items-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg" data-id="1">
+          <div class="w-20 h-20 rounded-md overflow-hidden mr-4">
+            <img
+              src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80"
+              alt="Wireless Earbuds" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-grow">
+            <h3 class="font-medium">Quantum X Earbuds</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Black</p>
+            <div class="flex justify-between items-center mt-1">
+              <span class="font-medium">$89.99</span>
+              <div class="flex items-center space-x-2">
+                <button
+                  class="decrease-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-dark-600 flex items-center justify-center">
+                  <i class="fas fa-minus text-xs"></i>
+                </button>
+                <span class="quantity">1</span>
+                <button
+                  class="increase-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-dark-600 flex items-center justify-center">
+                  <i class="fas fa-plus text-xs"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button class="remove-item ml-4 text-gray-400 hover:text-secondary-light dark:hover:text-secondary-dark">
+            <i class="far fa-trash-alt"></i>
+          </button>
+        </div>
+
+        <!-- Cart Item 2 -->
+        <div class="cart-item flex items-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg" data-id="2">
+          <div class="w-20 h-20 rounded-md overflow-hidden mr-4">
+            <img
+              src="https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+              alt="Smart TV" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-grow">
+            <h3 class="font-medium">Ultra HD Smart TV</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">65" 4K HDR</p>
+            <div class="flex justify-between items-center mt-1">
+              <span class="font-medium">$899.99</span>
+              <div class="flex items-center space-x-2">
+                <button
+                  class="decrease-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-dark-600 flex items-center justify-center">
+                  <i class="fas fa-minus text-xs"></i>
+                </button>
+                <span class="quantity">1</span>
+                <button
+                  class="increase-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-dark-600 flex items-center justify-center">
+                  <i class="fas fa-plus text-xs"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button class="remove-item ml-4 text-gray-400 hover:text-secondary-light dark:hover:text-secondary-dark">
+            <i class="far fa-trash-alt"></i>
+          </button>
+        </div>
+
+        <!-- Cart Item 3 -->
+        <div class="cart-item flex items-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg" data-id="4">
+          <div class="w-20 h-20 rounded-md overflow-hidden mr-4">
+            <img
+              src="https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+              alt="Smart Home Hub" class="w-full h-full object-cover">
+          </div>
+          <div class="flex-grow">
+            <h3 class="font-medium">Smart Home Hub</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Central Controller</p>
+            <div class="flex justify-between items-center mt-1">
+              <span class="font-medium">$249.99</span>
+              <div class="flex items-center space-x-2">
+                <button
+                  class="decrease-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-dark-600 flex items-center justify-center">
+                  <i class="fas fa-minus text-xs"></i>
+                </button>
+                <span class="quantity">1</span>
+                <button
+                  class="increase-qty w-6 h-6 rounded-full bg-gray-200 dark:bg-dark-600 flex items-center justify-center">
+                  <i class="fas fa-plus text-xs"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <button class="remove-item ml-4 text-gray-400 hover:text-secondary-light dark:hover:text-secondary-dark">
+            <i class="far fa-trash-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-200 dark:border-dark-700 pt-4 mb-6">
+        <div class="flex justify-between mb-2">
+          <span class="text-gray-600 dark:text-gray-400">Subtotal</span>
+          <span class="font-medium">$<span id="subtotal">1,239.97</span></span>
+        </div>
+        <div class="flex justify-between mb-2">
+          <span class="text-gray-600 dark:text-gray-400">Shipping</span>
+          <span class="font-medium">Free</span>
+        </div>
+        <div class="flex justify-between mb-2">
+          <span class="text-gray-600 dark:text-gray-400">Tax</span>
+          <span class="font-medium">$<span id="tax">99.20</span></span>
+        </div>
+        <div class="flex justify-between text-lg font-bold mt-4">
+          <span>Total</span>
+          <span>$<span id="total">1,339.17</span></span>
+        </div>
+      </div>
+
+      <button id="checkout-btn"
+        class="w-full py-3 bg-primary-light dark:bg-primary-dark text-white rounded-full font-medium hover:opacity-90 mb-4">
+        Proceed to Checkout
+      </button>
+      <button id="continue-shopping-btn"
+        class="w-full py-3 border border-gray-300 dark:border-dark-700 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-dark-700">
+        Continue Shopping
+      </button>
+    </div>
+  </div>
+
+  <!-- Checkout Modal -->
+  <div id="checkout-modal" class="modal">
+    <div class="modal-content">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Complete Your Purchase</h2>
+        <button id="checkout-close"
+          class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-700">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="mb-8">
+        <h3 class="font-medium mb-4">Order Summary</h3>
+        <div class="bg-gray-50 dark:bg-dark-700 rounded-lg p-4">
+          <div class="flex justify-between mb-2">
+            <span class="text-gray-600 dark:text-gray-400">Subtotal</span>
+            <span class="font-medium">$<span id="checkout-subtotal">1,239.97</span></span>
+          </div>
+          <div class="flex justify-between mb-2">
+            <span class="text-gray-600 dark:text-gray-400">Shipping</span>
+            <span class="font-medium">Free</span>
+          </div>
+          <div class="flex justify-between mb-2">
+            <span class="text-gray-600 dark:text-gray-400">Tax</span>
+            <span class="font-medium">$<span id="checkout-tax">99.20</span></span>
+          </div>
+          <div class="flex justify-between text-lg font-bold mt-4 pt-4 border-t border-gray-200 dark:border-dark-600">
+            <span>Total</span>
+            <span>$<span id="checkout-total">1,339.17</span></span>
+          </div>
+        </div>
+      </div>
+
+      <form id="checkout-form">
+        <div class="mb-8">
+          <h3 class="font-medium mb-4">Shipping Information</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="form-group">
+              <label for="first-name" class="form-label">First Name</label>
+              <input type="text" id="first-name" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label for="last-name" class="form-label">Last Name</label>
+              <input type="text" id="last-name" class="form-input" required>
+            </div>
+          </div>
+          <div class="form-group mb-4">
+            <label for="address" class="form-label">Address</label>
+            <input type="text" id="address" class="form-input" required>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="form-group">
+              <label for="city" class="form-label">City</label>
+              <input type="text" id="city" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label for="state" class="form-label">State</label>
+              <input type="text" id="state" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label for="zip" class="form-label">ZIP Code</label>
+              <input type="text" id="zip" class="form-input" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <h3 class="font-medium mb-4">Payment Method</h3>
+          <div class="space-y-3">
+            <label class="payment-method">
+              <input type="radio" name="payment-method" value="credit-card" checked class="mr-2">
+              <div class="flex items-center">
+                <i class="far fa-credit-card text-xl mr-3"></i>
+                <span>Credit Card</span>
+              </div>
+            </label>
+            <label class="payment-method">
+              <input type="radio" name="payment-method" value="paypal" class="mr-2">
+              <div class="flex items-center">
+                <i class="fab fa-paypal text-xl mr-3"></i>
+                <span>PayPal</span>
+              </div>
+            </label>
+            <label class="payment-method">
+              <input type="radio" name="payment-method" value="apple-pay" class="mr-2">
+              <div class="flex items-center">
+                <i class="fab fa-apple text-xl mr-3"></i>
+                <span>Apple Pay</span>
+              </div>
+            </label>
+            <label class="payment-method">
+              <input type="radio" name="payment-method" value="google-pay" class="mr-2">
+              <div class="flex items-center">
+                <i class="fab fa-google text-xl mr-3"></i>
+                <span>Google Pay</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Credit Card Form (shown when credit card is selected) -->
+          <div id="credit-card-form" class="mt-6">
+            <div class="form-group mb-4">
+              <label for="card-number" class="form-label">Card Number</label>
+              <input type="text" id="card-number" placeholder="1234 5678 9012 3456" class="form-input">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div class="form-group">
+                <label for="expiry-date" class="form-label">Expiry Date</label>
+                <input type="text" id="expiry-date" placeholder="MM/YY" class="form-input">
+              </div>
+              <div class="form-group">
+                <label for="cvv" class="form-label">CVV</label>
+                <input type="text" id="cvv" placeholder="123" class="form-input">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="card-name" class="form-label">Name on Card</label>
+              <input type="text" id="card-name" class="form-input">
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" id="place-order-btn"
+          class="w-full py-3 bg-primary-light dark:bg-primary-dark text-white rounded-full font-medium hover:opacity-90 mb-4">
+          Place Order
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Success Modal -->
+  <div id="success-modal" class="modal">
+    <div class="modal-content text-center">
+      <div class="success-icon">
+        <i class="fas fa-check text-white text-3xl"></i>
+      </div>
+      <h2 class="text-2xl font-bold mb-4">Order Placed Successfully!</h2>
+      <p class="text-gray-600 dark:text-gray-400 mb-6">Thank you for your purchase. Your order #SM12345 has been
+        confirmed.</p>
+      
+      <!-- Payment Slip -->
+      <div class="payment-slip dark:bg-dark-700 dark:text-white dark:border-dark-600 mb-6">
+        <div class="payment-slip-header">
+          <h3 class="font-bold text-lg">SmartMart</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Order #SM12345</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">June 15, 2025</p>
+        </div>
+        
+        <div class="payment-slip-details">
+          <div class="payment-slip-row">
+            <span>Quantum X Earbuds</span>
+            <span>$89.99</span>
+          </div>
+          <div class="payment-slip-row">
+            <span>Ultra HD Smart TV</span>
+            <span>$899.99</span>
+          </div>
+          <div class="payment-slip-row">
+            <span>Smart Home Hub</span>
+            <span>$249.99</span>
+          </div>
+          <div class="payment-slip-row">
+            <span>Shipping</span>
+            <span>FREE</span>
+          </div>
+          <div class="payment-slip-row">
+            <span>Tax</span>
+            <span>$99.20</span>
+          </div>
+          
+          <div class="payment-slip-total">
+            <div class="payment-slip-row">
+              <span>Total</span>
+              <span>$1,339.17</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="payment-slip-footer">
+          <p>Thank you for shopping with SmartMart!</p>
+          <p>Your order will be shipped within 2 business days.</p>
+        </div>
+      </div>
+      
+      <button id="continue-shopping-success"
+        class="w-full py-3 bg-primary-light dark:bg-primary-dark text-white rounded-full font-medium hover:opacity-90 mb-4">
+        Continue Shopping
+      </button>
+      <button id="view-order-btn"
+        class="w-full py-3 border border-gray-300 dark:border-dark-700 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-dark-700">
+        View Order Details
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Cart data
+    let cart = [
+      { id: 1, name: "Quantum X Earbuds", price: 89.99, quantity: 1, image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80" },
+      { id: 2, name: "Ultra HD Smart TV", price: 899.99, quantity: 1, image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" },
+      { id: 4, name: "Smart Home Hub", price: 249.99, quantity: 1, image: "https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" }
+    ];
+
+    // Wishlist data
+    let wishlist = [3]; // Product ID 3 is in wishlist initially
+
+    // Calculate cart totals
+    function calculateCartTotals() {
+      let subtotal = 0;
+      cart.forEach(item => {
+        subtotal += item.price * item.quantity;
+      });
+      const tax = subtotal * 0.08; // 8% tax
+      const total = subtotal + tax;
+
+      return {
+        subtotal: subtotal.toFixed(2),
+        tax: tax.toFixed(2),
+        total: total.toFixed(2)
+      };
+    }
+
+    // Update cart display
+    function updateCartDisplay() {
+      const totals = calculateCartTotals();
+
+      // Update cart count
+      const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.getElementById('cart-count').textContent = cartCount;
+      document.getElementById('cart-count-display').textContent = cartCount;
+
+      // Update totals
+      document.getElementById('subtotal').textContent = totals.subtotal;
+      document.getElementById('tax').textContent = totals.tax;
+      document.getElementById('total').textContent = totals.total;
+
+      // Update checkout modal totals
+      document.getElementById('checkout-subtotal').textContent = totals.subtotal;
+      document.getElementById('checkout-tax').textContent = totals.tax;
+      document.getElementById('checkout-total').textContent = totals.total;
+    }
+
+    // Initialize cart display
+    updateCartDisplay();
+
+    // Dark mode toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+
+    themeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Set initial theme based on localStorage or prefer-color-scheme
+    if (localStorage.getItem('theme') === 'dark' ||
+      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+    }
+
+    // Cart sidebar toggle
+    const cartToggle = document.getElementById('cart-toggle');
+    const cartClose = document.getElementById('cart-close');
+    const cartSidebar = document.getElementById('cart-sidebar');
+
+    cartToggle.addEventListener('click', () => {
+      cartSidebar.classList.remove('translate-x-full');
+    });
+
+    cartClose.addEventListener('click', () => {
+      cartSidebar.classList.add('translate-x-full');
+    });
+
+    // Close cart when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!cartSidebar.contains(e.target) && e.target !== cartToggle && !cartToggle.contains(e.target)) {
+        cartSidebar.classList.add('translate-x-full');
+      }
+    });
+
+    // Continue shopping button
+    document.getElementById('continue-shopping-btn').addEventListener('click', () => {
+      cartSidebar.classList.add('translate-x-full');
+    });
+
+    // Add to cart functionality
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const productCard = e.target.closest('.product-card');
+        const productId = parseInt(productCard.dataset.id);
+        const productName = productCard.dataset.name;
+        const productPrice = parseFloat(productCard.dataset.price);
+        const productImage = productCard.querySelector('img').src;
+
+        // Check if product already in cart
+        const existingItem = cart.find(item => item.id === productId);
+
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({
+            id: productId,
+            name: productName,
+            price: productPrice,
+            quantity: 1,
+            image: productImage
+          });
+        }
+
+        updateCartDisplay();
+
+        // Show cart sidebar
+        cartSidebar.classList.remove('translate-x-full');
+
+        // Show success message
+        alert(`${productName} has been added to your cart!`);
+      });
+    });
+
+    // Wishlist functionality
+    document.querySelectorAll('.wishlist-btn').forEach(button => {
+      const productId = parseInt(button.dataset.id);
+
+      // Update heart icon based on wishlist status
+      if (wishlist.includes(productId)) {
+        button.innerHTML = '<i class="fas fa-heart text-secondary-light dark:text-secondary-dark"></i>';
+      }
+
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const productCard = e.target.closest('.product-card');
+        const productName = productCard.dataset.name;
+
+        if (wishlist.includes(productId)) {
+          // Remove from wishlist
+          wishlist = wishlist.filter(id => id !== productId);
+          button.innerHTML = '<i class="far fa-heart text-gray-600 dark:text-gray-300"></i>';
+          alert(`${productName} removed from wishlist`);
+        } else {
+          // Add to wishlist
+          wishlist.push(productId);
+          button.innerHTML = '<i class="fas fa-heart text-secondary-light dark:text-secondary-dark"></i>';
+          alert(`${productName} added to wishlist`);
+        }
+      });
+    });
+
+    // Cart item quantity controls
+    document.addEventListener('click', (e) => {
+      // Increase quantity
+      if (e.target.classList.contains('increase-qty') || e.target.parentElement.classList.contains('increase-qty')) {
+        const button = e.target.classList.contains('increase-qty') ? e.target : e.target.parentElement;
+        const cartItem = button.closest('.cart-item');
+        const itemId = parseInt(cartItem.dataset.id);
+        const quantityElement = cartItem.querySelector('.quantity');
+
+        const item = cart.find(item => item.id === itemId);
+        if (item) {
+          item.quantity += 1;
+          quantityElement.textContent = item.quantity;
+          updateCartDisplay();
+        }
+      }
+
+      // Decrease quantity
+      if (e.target.classList.contains('decrease-qty') || e.target.parentElement.classList.contains('decrease-qty')) {
+        const button = e.target.classList.contains('decrease-qty') ? e.target : e.target.parentElement;
+        const cartItem = button.closest('.cart-item');
+        const itemId = parseInt(cartItem.dataset.id);
+        const quantityElement = cartItem.querySelector('.quantity');
+
+        const item = cart.find(item => item.id === itemId);
+        if (item && item.quantity > 1) {
+          item.quantity -= 1;
+          quantityElement.textContent = item.quantity;
+          updateCartDisplay();
+        }
+      }
+
+      // Remove item
+      if (e.target.classList.contains('remove-item') || e.target.parentElement.classList.contains('remove-item')) {
+        const button = e.target.classList.contains('remove-item') ? e.target : e.target.parentElement;
+        const cartItem = button.closest('.cart-item');
+        const itemId = parseInt(cartItem.dataset.id);
+
+        cart = cart.filter(item => item.id !== itemId);
+        cartItem.remove();
+        updateCartDisplay();
+
+        if (cart.length === 0) {
+          document.getElementById('cart-items').innerHTML = '<p class="text-center py-4">Your cart is empty</p>';
+        }
+      }
+    });
+
+    // Checkout functionality
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const checkoutModal = document.getElementById('checkout-modal');
+    const checkoutClose = document.getElementById('checkout-close');
+
+    checkoutBtn.addEventListener('click', () => {
+      cartSidebar.classList.add('translate-x-full');
+      checkoutModal.style.display = 'flex';
+    });
+
+    checkoutClose.addEventListener('click', () => {
+      checkoutModal.style.display = 'none';
+    });
+
+    // Close checkout modal when clicking outside
+    window.addEventListener('click', (e) => {
+      if (e.target === checkoutModal) {
+        checkoutModal.style.display = 'none';
+      }
+    });
+
+    // Payment method selection
+    const paymentMethods = document.querySelectorAll('input[name="payment-method"]');
+    const creditCardForm = document.getElementById('credit-card-form');
+
+    paymentMethods.forEach(method => {
+      method.addEventListener('change', (e) => {
+        if (e.target.value === 'credit-card') {
+          creditCardForm.style.display = 'block';
+        } else {
+          creditCardForm.style.display = 'none';
+        }
+      });
+    });
+
+    // Place order functionality
+    const checkoutForm = document.getElementById('checkout-form');
+    const successModal = document.getElementById('success-modal');
+    const continueShoppingSuccess = document.getElementById('continue-shopping-success');
+    
+    checkoutForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      checkoutModal.style.display = 'none';
+      successModal.style.display = 'flex';
+      
+      // Clear cart after successful order
+      cart = [];
+      updateCartDisplay();
+      document.getElementById('cart-items').innerHTML = '<p class="text-center py-4">Your cart is empty</p>';
+    });
+    
+    continueShoppingSuccess.addEventListener('click', () => {
+      successModal.style.display = 'none';
+    });
+    
+    document.getElementById('view-order-btn').addEventListener('click', () => {
+      successModal.style.display = 'none';
+      alert('Order details would be shown here in a real implementation.');
+    });
+
+    // View all products button
+    document.getElementById('view-all-btn').addEventListener('click', () => {
+      alert('This would show all products in a real implementation.');
+    });
+    
+    // Support button
+    document.getElementById('support-btn').addEventListener('click', () => {
+      alert('Contact support at support@smartmart.com or call 1-800-SMART-MART');
+    });
+    
+    // Subscribe button
+    document.getElementById('subscribe-btn').addEventListener('click', () => {
+      const email = document.getElementById('newsletter-email').value;
+      if (email && email.includes('@')) {
+        alert(`Thank you for subscribing with ${email}! You'll receive our newsletter soon.`);
+        document.getElementById('newsletter-email').value = '';
+      } else {
+        alert('Please enter a valid email address.');
+      }
+    });
+    
+    // Shop now button
+    document.getElementById('shop-now-btn').addEventListener('click', () => {
+      window.location.href = '#shop';
+    });
+    
+    // Explore button
+    document.getElementById('explore-btn').addEventListener('click', () => {
+      window.location.href = '#collections';
+    });
+  </script>
+
+</html>
