@@ -7,6 +7,7 @@
   <title>SmartMart | Electronics Superstore</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -47,235 +48,7 @@
         }
       }
     }
-    // Add a wishlist button, so when it is clicked, it shows the product to a wishlist array
   </script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-    * {
-      font-family: 'Inter', sans-serif;
-      transition: background-color 0.3s, color 0.2s, transform 0.3s;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    .gradient-text {
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      background-image: linear-gradient(90deg, #6366f1, #f43f5e);
-    }
-
-    .product-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-
-    .product-card:hover .product-image {
-      transform: scale(1.05);
-    }
-
-    .product-image {
-      transition: transform 0.5s cubic-bezier(0.25, 0.45, 0.45, 0.95);
-    }
-
-    .blob {
-      filter: blur(60px);
-      opacity: 0.6;
-      z-index: -1;
-    }
-
-    .nav-link::after {
-      content: '';
-      display: block;
-      width: 0;
-      height: 2px;
-      background: currentColor;
-      transition: width 0.3s;
-    }
-
-    .nav-link:hover::after {
-      width: 100%;
-    }
-
-    .cart-item {
-      animation: slideIn 0.3s ease-out;
-    }
-
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .dark .gradient-text {
-      background-image: linear-gradient(90deg, #818cf8, #fb7185);
-    }
-
-    .dark .blob {
-      opacity: 0.3;
-    }
-
-    .hero-pattern {
-      background-image: radial-gradient(circle, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
-      background-size: 20px 20px;
-    }
-
-    .dark .hero-pattern {
-      background-image: radial-gradient(circle, rgba(129, 140, 248, 0.1) 1px, transparent 1px);
-    }
-
-    /* Modal styles */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background-color: white;
-      padding: 2rem;
-      border-radius: 0.5rem;
-      max-width: 500px;
-      width: 90%;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .dark .modal-content {
-      background-color: #1e293b;
-    }
-
-    /* Payment method selection */
-    .payment-method {
-      display: flex;
-      align-items: center;
-      padding: 1rem;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.5rem;
-      margin-bottom: 1rem;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .payment-method:hover {
-      border-color: #6366f1;
-    }
-
-    .payment-method.selected {
-      border-color: #6366f1;
-      background-color: #f8fafc;
-    }
-
-    .dark .payment-method.selected {
-      background-color: #334155;
-    }
-
-    .payment-method input {
-      margin-right: 1rem;
-    }
-
-    /* Form styles */
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.5rem;
-      transition: border-color 0.3s;
-    }
-
-    .form-input:focus {
-      outline: none;
-      border-color: #6366f1;
-    }
-
-    .dark .form-input {
-      background-color: #334155;
-      border-color: #475569;
-      color: white;
-    }
-
-    /* Success modal */
-    .success-icon {
-      width: 80px;
-      height: 80px;
-      background-color: #10b981;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.5rem;
-    }
-    
-    /* Payment slip styles */
-    .payment-slip {
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      max-width: 400px;
-      margin: 0 auto;
-      border: 1px solid #e2e8f0;
-    }
-    
-    .payment-slip-header {
-      text-align: center;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px dashed #e2e8f0;
-    }
-    
-    .payment-slip-details {
-      margin-bottom: 20px;
-    }
-    
-    .payment-slip-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    }
-    
-    .payment-slip-total {
-      border-top: 1px dashed #e2e8f0;
-      padding-top: 15px;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    
-    .payment-slip-footer {
-      text-align: center;
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 1px dashed #e2e8f0;
-      font-size: 12px;
-      color: #64748b;
-    }
-  </style>
 </head>
 
 <body class="bg-gray-50 text-gray-900 dark:bg-dark-900 dark:text-gray-100 min-h-screen">
@@ -310,12 +83,12 @@
 
         <div class="flex items-center gap-2 ml-5">
           <button id="theme-toggle"
-            class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-800">
+            class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-400 dark:hover:bg-dark-800">
             <i class="fas fa-moon dark:hidden"></i>
             <i class="fas fa-sun hidden dark:block"></i>
           </button>
 
-          <button id="wishlist-toggle" class="wishlist-btn w-10 h-10 rounded-full bg-white dark:bg-dark-700 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-600" data-id="2"><i class="fas fa-heart"></i></button>
+          <button id="wishlist-toggle" class="wishlist-btn w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-400 dark:hover:bg-dark-800" data-id="2"><i class="fas fa-heart"></i></button>
 
           <button id="cart-toggle"
             class="relative w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-800">
@@ -325,7 +98,7 @@
           </button>
 
           <button
-            class="md:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-800">
+            class="md:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-400 dark:hover:bg-dark-800">
             <i class="fas fa-bars"></i>
           </button>
         </div>
@@ -358,7 +131,7 @@
         <div class="md:w-1/2 relative">
           <div class="relative">
             <img
-              src="https://images.unsplash.com/photo-1550009158-9ebf69173e03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1201&q=80"
+              src="images/headphones.jpg"
               alt="Smart Devices"
               class="w-full max-w-md mx-auto rounded-2xl shadow-2xl border-8 border-white dark:border-dark-800 animate-float">
             <div class="absolute -bottom-6 -left-6 bg-white dark:bg-dark-800 p-4 rounded-xl shadow-lg">
@@ -944,6 +717,50 @@
     </div>
   </div>
 
+<!-- Wishlist Sidebar -->
+<div id="wishlist-sidebar"
+  class="fixed top-0 right-0 h-full w-full md:w-96 bg-white dark:bg-dark-800 shadow-xl transform translate-x-full transition-transform duration-300 z-50 overflow-y-auto">
+  <div class="p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold">Your Wishlist (<span id="wishlist-count">1</span>)</h2>
+      <button id="wishlist-close"
+        class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 dark:hover:bg-dark-700">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div id="wishlist-items" class="space-y-4 mb-6">
+      <!-- Wishlist Item 3 (from initial wishlist data) -->
+      <div class="wishlist-item flex items-center p-3 bg-gray-50 dark:bg-dark-700 rounded-lg" data-id="3">
+        <div class="w-20 h-20 rounded-md overflow-hidden mr-4">
+          <img
+            src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1032&q=80"
+            alt="Laptop" class="w-full h-full object-cover">
+        </div>
+        <div class="flex-grow">
+          <h3 class="font-medium">Horizon Pro Laptop</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">16GB RAM • 1TB SSD • RTX 4060</p>
+          <div class="flex justify-between items-center mt-1">
+            <span class="font-medium">$1,299.99</span>
+            <button
+              class="move-to-cart px-4 py-1 bg-primary-light dark:bg-primary-dark text-white text-sm rounded-full font-medium hover:opacity-90">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+        <button class="remove-from-wishlist ml-4 text-gray-400 hover:text-secondary-light dark:hover:text-secondary-dark">
+          <i class="far fa-trash-alt"></i>
+        </button>
+      </div>
+    </div>
+
+    <button id="continue-shopping-wishlist"
+      class="w-full py-3 border border-gray-300 dark:border-dark-700 rounded-full font-medium hover:bg-gray-100 dark:hover:bg-dark-700">
+      Continue Shopping
+    </button>
+  </div>
+</div>
+
   <!-- Checkout Modal -->
   <div id="checkout-modal" class="modal">
     <div class="modal-content">
@@ -1139,296 +956,6 @@
     </div>
   </div>
 
-  <script>
-    // Cart data
-    let cart = [
-      { id: 1, name: "Quantum X Earbuds", price: 89.99, quantity: 1, image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80" },
-      { id: 2, name: "Ultra HD Smart TV", price: 899.99, quantity: 1, image: "https://images.unsplash.com/photo-1593784991095-a205069470b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" },
-      { id: 4, name: "Smart Home Hub", price: 249.99, quantity: 1, image: "https://images.unsplash.com/photo-1558002038-1055907df827?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" }
-    ];
-
-    // Wishlist data
-    let wishlist = [3]; // Product ID 3 is in wishlist initially
-
-    // Calculate cart totals
-    function calculateCartTotals() {
-      let subtotal = 0;
-      cart.forEach(item => {
-        subtotal += item.price * item.quantity;
-      });
-      const tax = subtotal * 0.08; // 8% tax
-      const total = subtotal + tax;
-
-      return {
-        subtotal: subtotal.toFixed(2),
-        tax: tax.toFixed(2),
-        total: total.toFixed(2)
-      };
-    }
-
-    // Update cart display
-    function updateCartDisplay() {
-      const totals = calculateCartTotals();
-
-      // Update cart count
-      const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-      document.getElementById('cart-count').textContent = cartCount;
-      document.getElementById('cart-count-display').textContent = cartCount;
-
-      // Update totals
-      document.getElementById('subtotal').textContent = totals.subtotal;
-      document.getElementById('tax').textContent = totals.tax;
-      document.getElementById('total').textContent = totals.total;
-
-      // Update checkout modal totals
-      document.getElementById('checkout-subtotal').textContent = totals.subtotal;
-      document.getElementById('checkout-tax').textContent = totals.tax;
-      document.getElementById('checkout-total').textContent = totals.total;
-    }
-
-    // Initialize cart display
-    updateCartDisplay();
-
-    // Dark mode toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-
-    themeToggle.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
-    });
-
-    // Set initial theme based on localStorage or prefer-color-scheme
-    if (localStorage.getItem('theme') === 'dark' ||
-      (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      html.classList.add('dark');
-    }
-
-    // Cart sidebar toggle
-    const cartToggle = document.getElementById('cart-toggle');
-    const cartClose = document.getElementById('cart-close');
-    const cartSidebar = document.getElementById('cart-sidebar');
-
-    cartToggle.addEventListener('click', () => {
-      cartSidebar.classList.remove('translate-x-full');
-    });
-
-    cartClose.addEventListener('click', () => {
-      cartSidebar.classList.add('translate-x-full');
-    });
-
-    // Close cart when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!cartSidebar.contains(e.target) && e.target !== cartToggle && !cartToggle.contains(e.target)) {
-        cartSidebar.classList.add('translate-x-full');
-      }
-    });
-
-    // Continue shopping button
-    document.getElementById('continue-shopping-btn').addEventListener('click', () => {
-      cartSidebar.classList.add('translate-x-full');
-    });
-
-    // Add to cart functionality
-    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-      button.addEventListener('click', (e) => {
-        const productCard = e.target.closest('.product-card');
-        const productId = parseInt(productCard.dataset.id);
-        const productName = productCard.dataset.name;
-        const productPrice = parseFloat(productCard.dataset.price);
-        const productImage = productCard.querySelector('img').src;
-
-        // Check if product already in cart
-        const existingItem = cart.find(item => item.id === productId);
-
-        if (existingItem) {
-          existingItem.quantity += 1;
-        } else {
-          cart.push({
-            id: productId,
-            name: productName,
-            price: productPrice,
-            quantity: 1,
-            image: productImage
-          });
-        }
-
-        updateCartDisplay();
-
-        // Show cart sidebar
-        cartSidebar.classList.remove('translate-x-full');
-
-        // Show success message
-        alert(`${productName} has been added to your cart!`);
-      });
-    });
-
-    // Wishlist functionality
-    document.querySelectorAll('.wishlist-btn').forEach(button => {
-      const productId = parseInt(button.dataset.id);
-
-      // Update heart icon based on wishlist status
-      if (wishlist.includes(productId)) {
-        button.innerHTML = '<i class="fas fa-heart text-secondary-light dark:text-secondary-dark"></i>';
-      }
-
-      button.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const productCard = e.target.closest('.product-card');
-        const productName = productCard.dataset.name;
-
-        if (wishlist.includes(productId)) {
-          // Remove from wishlist
-          wishlist = wishlist.filter(id => id !== productId);
-          button.innerHTML = '<i class="far fa-heart text-gray-600 dark:text-gray-300"></i>';
-          alert(`${productName} removed from wishlist`);
-        } else {
-          // Add to wishlist
-          wishlist.push(productId);
-          button.innerHTML = '<i class="fas fa-heart text-secondary-light dark:text-secondary-dark"></i>';
-          alert(`${productName} added to wishlist`);
-        }
-      });
-    });
-
-    // Cart item quantity controls
-    document.addEventListener('click', (e) => {
-      // Increase quantity
-      if (e.target.classList.contains('increase-qty') || e.target.parentElement.classList.contains('increase-qty')) {
-        const button = e.target.classList.contains('increase-qty') ? e.target : e.target.parentElement;
-        const cartItem = button.closest('.cart-item');
-        const itemId = parseInt(cartItem.dataset.id);
-        const quantityElement = cartItem.querySelector('.quantity');
-
-        const item = cart.find(item => item.id === itemId);
-        if (item) {
-          item.quantity += 1;
-          quantityElement.textContent = item.quantity;
-          updateCartDisplay();
-        }
-      }
-
-      // Decrease quantity
-      if (e.target.classList.contains('decrease-qty') || e.target.parentElement.classList.contains('decrease-qty')) {
-        const button = e.target.classList.contains('decrease-qty') ? e.target : e.target.parentElement;
-        const cartItem = button.closest('.cart-item');
-        const itemId = parseInt(cartItem.dataset.id);
-        const quantityElement = cartItem.querySelector('.quantity');
-
-        const item = cart.find(item => item.id === itemId);
-        if (item && item.quantity > 1) {
-          item.quantity -= 1;
-          quantityElement.textContent = item.quantity;
-          updateCartDisplay();
-        }
-      }
-
-      // Remove item
-      if (e.target.classList.contains('remove-item') || e.target.parentElement.classList.contains('remove-item')) {
-        const button = e.target.classList.contains('remove-item') ? e.target : e.target.parentElement;
-        const cartItem = button.closest('.cart-item');
-        const itemId = parseInt(cartItem.dataset.id);
-
-        cart = cart.filter(item => item.id !== itemId);
-        cartItem.remove();
-        updateCartDisplay();
-
-        if (cart.length === 0) {
-          document.getElementById('cart-items').innerHTML = '<p class="text-center py-4">Your cart is empty</p>';
-        }
-      }
-    });
-
-    // Checkout functionality
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const checkoutModal = document.getElementById('checkout-modal');
-    const checkoutClose = document.getElementById('checkout-close');
-
-    checkoutBtn.addEventListener('click', () => {
-      cartSidebar.classList.add('translate-x-full');
-      checkoutModal.style.display = 'flex';
-    });
-
-    checkoutClose.addEventListener('click', () => {
-      checkoutModal.style.display = 'none';
-    });
-
-    // Close checkout modal when clicking outside
-    window.addEventListener('click', (e) => {
-      if (e.target === checkoutModal) {
-        checkoutModal.style.display = 'none';
-      }
-    });
-
-    // Payment method selection
-    const paymentMethods = document.querySelectorAll('input[name="payment-method"]');
-    const creditCardForm = document.getElementById('credit-card-form');
-
-    paymentMethods.forEach(method => {
-      method.addEventListener('change', (e) => {
-        if (e.target.value === 'credit-card') {
-          creditCardForm.style.display = 'block';
-        } else {
-          creditCardForm.style.display = 'none';
-        }
-      });
-    });
-
-    // Place order functionality
-    const checkoutForm = document.getElementById('checkout-form');
-    const successModal = document.getElementById('success-modal');
-    const continueShoppingSuccess = document.getElementById('continue-shopping-success');
-    
-    checkoutForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      checkoutModal.style.display = 'none';
-      successModal.style.display = 'flex';
-      
-      // Clear cart after successful order
-      cart = [];
-      updateCartDisplay();
-      document.getElementById('cart-items').innerHTML = '<p class="text-center py-4">Your cart is empty</p>';
-    });
-    
-    continueShoppingSuccess.addEventListener('click', () => {
-      successModal.style.display = 'none';
-    });
-    
-    document.getElementById('view-order-btn').addEventListener('click', () => {
-      successModal.style.display = 'none';
-      alert('Order details would be shown here in a real implementation.');
-    });
-
-    // View all products button
-    document.getElementById('view-all-btn').addEventListener('click', () => {
-      alert('This would show all products in a real implementation.');
-    });
-    
-    // Support button
-    document.getElementById('support-btn').addEventListener('click', () => {
-      alert('Contact support at support@smartmart.com or call 1-800-SMART-MART');
-    });
-    
-    // Subscribe button
-    document.getElementById('subscribe-btn').addEventListener('click', () => {
-      const email = document.getElementById('newsletter-email').value;
-      if (email && email.includes('@')) {
-        alert(`Thank you for subscribing with ${email}! You'll receive our newsletter soon.`);
-        document.getElementById('newsletter-email').value = '';
-      } else {
-        alert('Please enter a valid email address.');
-      }
-    });
-    
-    // Shop now button
-    document.getElementById('shop-now-btn').addEventListener('click', () => {
-      window.location.href = '#shop';
-    });
-    
-    // Explore button
-    document.getElementById('explore-btn').addEventListener('click', () => {
-      window.location.href = '#collections';
-    });
-  </script>
+  <script src="main.js"></script>
 
 </html>
