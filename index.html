@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartMart | Electronics Superstore</title>
+  <title>SmartMart | Electronics Store</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
@@ -79,15 +79,15 @@
 
   <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
     <div
-      class="blob bg-primary-light dark:bg-primary-dark w-80 h-80 rounded-full absolute top-1/4 -left-20 animate-float">
+      class="blob bg-primary-light opacity-30 dark:bg-primary-dark w-80 h-80 rounded-full absolute top-1/4 -left-20 animate-float">
     </div>
     <div
-      class="blob bg-secondary-light dark:bg-secondary-dark w-96 h-96 rounded-full absolute bottom-1/4 -right-20 animate-float-reverse">
+      class="blob bg-secondary-light opacity-30 dark:bg-secondary-dark w-96 h-96 rounded-full absolute bottom-1/4 -right-20 animate-float-reverse">
     </div>
   </div>
 
   <!-- Header -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-dark-900/80 shadow-sm">
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-dark-900/80 shadow-sm">          
     <div class="container mx-auto px-6 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-2">
@@ -97,7 +97,7 @@
           <span class="text-2xl font-bold gradient-text">SmartMart</span>
         </div>
 
-        <nav class="hidden md:flex items-center space-x-8">
+        <nav class="hidden md:flex items-center space-x-8 mx-4">
           <a href="#" class="nav-link font-medium">Home</a>
           <a href="#shop" class="nav-link font-medium">Shop</a>
           <a href="#collections" class="nav-link font-medium">Categories</a>
@@ -123,12 +123,22 @@
               class="absolute -top-1 -right-1 bg-secondary-light dark:bg-secondary-dark text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</span>
           </button>
 
-          <button
+          <button id="nav-toggle"
             class="md:hidden w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-400 dark:hover:bg-dark-800">
             <i class="fas fa-bars"></i>
           </button>
         </div>
       </div>
+    </div>
+
+    <div class="block md:hidden" id="mobile-nav-container">
+      <nav id="mobile-nav" class="hidden right-0 text-right absolute space-x-8 py-3 px-8 z-50 backdrop-blur-md bg-white/80 dark:bg-dark-900/80 shadow-sm w-full -bottom-42 transition-all duration-300">
+        <a href="#" class="nav-link mb-3 font-medium">Home</a>
+          <a href="#shop" class="nav-link mb-3 align-right font-medium">Shop</a>
+          <a href="#collections" class="nav-link mb-3 font-medium">Categories</a>
+          <a href="#features" class="nav-link mb-3 font-medium">Features</a>
+          <a href="#testimonials" class="nav-link mb-3 font-medium">Reviews</a>
+      </nav>
     </div>
   </header>
 

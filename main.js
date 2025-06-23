@@ -258,6 +258,12 @@ if (
   html.classList.add("dark");
 }
 
+const mobileNav = document.getElementById("mobile-nav")
+const navToggle = document.getElementById("nav-toggle")
+navToggle.addEventListener('click', () => {
+  mobileNav.classList.toggle("hidden")
+})
+
 // Cart sidebar toggle
 const cartToggle = document.getElementById("cart-toggle");
 const cartClose = document.getElementById("cart-close");
