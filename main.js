@@ -470,12 +470,12 @@ continueShoppingSuccess.addEventListener("click", () => {
 
 document.getElementById("view-order-btn").addEventListener("click", () => {
   successModal.style.display = "none";
-  alert("Order details would be shown here in a real implementation.");
+  alert("Your order details is meant to show here but THIS IS A DEMO.");
 });
 
 // View all products button
 document.getElementById("view-all-btn").addEventListener("click", () => {
-  alert("This would show all products in a real implementation.");
+  alert("This is meant to show all products BUT THIS IS A DEMO.");
 });
 
 // Support button
