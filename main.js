@@ -1,4 +1,15 @@
-// Cart data
+// Loader
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    const loader = document.getElementById('loader');
+    loader.classList.add('hidden');
+    
+    setTimeout(() => {
+      loader.remove();
+    }, 500);
+  }, 700);
+});
+
 let cart = [
   {
     id: 1,
@@ -55,14 +66,12 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Continue shopping button
 document
   .getElementById("continue-shopping-wishlist")
   .addEventListener("click", () => {
     wishlistSidebar.classList.add("translate-x-full");
   });
 
-// Update wishlist display
 function updateWishlistDisplay() {
   const wishlistCount = wishlist.length;
   document.getElementById("wishlist-count").textContent = wishlistCount;
@@ -87,17 +96,14 @@ function updateWishlistDisplay() {
     navbarWishlistIcon.classList.add("far", "fa-heart");
   }
 
-  // Clear current wishlist items
   wishlistItemsContainer.innerHTML = "";
 
-  // Add current wishlist items
   if (wishlist.length === 0) {
     wishlistItemsContainer.innerHTML =
       '<p class="text-center py-4">Your wishlist is empty</p>';
     return;
   }
 
-  // Find all products that are in wishlist
   const allProducts = document.querySelectorAll(".product-card");
 
   wishlist.forEach((productId) => {
@@ -139,16 +145,13 @@ function updateWishlistDisplay() {
     }
   });
 
-  // Add event listeners to new wishlist items
   document.querySelectorAll(".remove-from-wishlist").forEach((button) => {
     button.addEventListener("click", (e) => {
       const wishlistItem = e.target.closest(".wishlist-item");
       const itemId = parseInt(wishlistItem.dataset.id);
 
-      // Remove from wishlist
       wishlist = wishlist.filter((id) => id !== itemId);
 
-      // Update product card heart icon
       const productCard = document.querySelector(
         `.product-card[data-id="${itemId}"]`
       );
@@ -158,7 +161,6 @@ function updateWishlistDisplay() {
           '<i class="far fa-heart text-gray-600 dark:text-gray-300"></i>';
       }
 
-      // Update display
       updateWishlistDisplay();
     });
   });
@@ -199,9 +201,9 @@ function updateWishlistDisplay() {
   });
 }
 
-// Initialize wishlist display
+
 updateWishlistDisplay();
-// Calculate cart totals
+
 function calculateCartTotals() {
   let subtotal = 0;
   cart.forEach((item) => {
@@ -221,23 +223,19 @@ function calculateCartTotals() {
 function updateCartDisplay() {
   const totals = calculateCartTotals();
 
-  // Update cart count
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   document.getElementById("cart-count").textContent = cartCount;
   document.getElementById("cart-count-display").textContent = cartCount;
 
-  // Update totals
   document.getElementById("subtotal").textContent = totals.subtotal;
   document.getElementById("tax").textContent = totals.tax;
   document.getElementById("total").textContent = totals.total;
 
-  // Update checkout modal totals
   document.getElementById("checkout-subtotal").textContent = totals.subtotal;
   document.getElementById("checkout-tax").textContent = totals.tax;
   document.getElementById("checkout-total").textContent = totals.total;
 }
 
-// Initialize cart display
 updateCartDisplay();
 
 // Dark mode toggle
@@ -252,7 +250,6 @@ themeToggle.addEventListener("click", () => {
   );
 });
 
-// Set initial theme based on localStorage or prefer-color-scheme
 if (
   localStorage.getItem("theme") === "dark" ||
   (!localStorage.getItem("theme") &&
@@ -274,7 +271,6 @@ cartClose.addEventListener("click", () => {
   cartSidebar.classList.add("translate-x-full");
 });
 
-// Close cart when clicking outside
 document.addEventListener("click", (e) => {
   if (
     !cartSidebar.contains(e.target) &&
@@ -285,14 +281,12 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Continue shopping button
 document
   .getElementById("continue-shopping-btn")
   .addEventListener("click", () => {
     cartSidebar.classList.add("translate-x-full");
   });
 
-// Add to cart functionality
 document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
   button.addEventListener("click", (e) => {
     const productCard = e.target.closest(".product-card");
@@ -301,7 +295,6 @@ document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
     const productPrice = parseFloat(productCard.dataset.price);
     const productImage = productCard.querySelector("img").src;
 
-    // Check if product already in cart
     const existingItem = cart.find((item) => item.id === productId);
 
     if (existingItem) {
@@ -318,15 +311,12 @@ document.querySelectorAll(".add-to-cart-btn").forEach((button) => {
 
     updateCartDisplay();
 
-    // Show cart sidebar
     cartSidebar.classList.remove("translate-x-full");
 
-    // Show success message
     alert(`${productName} has been added to your cart!`);
   });
 });
 
-// Wishlist functionality
 document.querySelectorAll(".wishlist-btn").forEach((button) => {
   const productId = parseInt(button.dataset.id);
 
@@ -348,20 +338,16 @@ document.querySelectorAll(".wishlist-btn").forEach((button) => {
         '<i class="far fa-heart text-gray-600 dark:text-gray-300"></i>';
       alert(`${productName} removed from wishlist`);
     } else {
-      // Add to wishlist
       wishlist.push(productId);
       button.innerHTML =
         '<i class="fas fa-heart text-secondary-light dark:text-secondary-dark"></i>';
       alert(`${productName} added to wishlist`);
     }
 
-    // Update wishlist display
     updateWishlistDisplay();
   });
 });
-// Cart item quantity controls
 document.addEventListener("click", (e) => {
-  // Increase quantity
   if (
     e.target.classList.contains("increase-qty") ||
     e.target.parentElement.classList.contains("increase-qty")
@@ -381,7 +367,6 @@ document.addEventListener("click", (e) => {
     }
   }
 
-  // Decrease quantity
   if (
     e.target.classList.contains("decrease-qty") ||
     e.target.parentElement.classList.contains("decrease-qty")
@@ -401,7 +386,6 @@ document.addEventListener("click", (e) => {
     }
   }
 
-  // Remove item
   if (
     e.target.classList.contains("remove-item") ||
     e.target.parentElement.classList.contains("remove-item")
@@ -423,7 +407,6 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Checkout functionality
 const checkoutBtn = document.getElementById("checkout-btn");
 const checkoutModal = document.getElementById("checkout-modal");
 const checkoutClose = document.getElementById("checkout-close");
@@ -437,14 +420,12 @@ checkoutClose.addEventListener("click", () => {
   checkoutModal.style.display = "none";
 });
 
-// Close checkout modal when clicking outside
 window.addEventListener("click", (e) => {
   if (e.target === checkoutModal) {
     checkoutModal.style.display = "none";
   }
 });
 
-// Payment method selection
 const paymentMethods = document.querySelectorAll(
   'input[name="payment-method"]'
 );
@@ -460,7 +441,6 @@ paymentMethods.forEach((method) => {
   });
 });
 
-// Place order functionality
 const checkoutForm = document.getElementById("checkout-form");
 const successModal = document.getElementById("success-modal");
 const continueShoppingSuccess = document.getElementById(
@@ -472,7 +452,6 @@ checkoutForm.addEventListener("submit", (e) => {
   checkoutModal.style.display = "none";
   successModal.style.display = "flex";
 
-  // Clear cart after successful order
   cart = [];
   updateCartDisplay();
   document.getElementById("cart-items").innerHTML =
