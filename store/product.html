@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Product Quick View</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="https://cdn.tailwindcss.com"></script>
+	<style>
+		html {
+			scroll-behavior: smooth;
+		}
+
+		/* Skeleton loader animation */
+		@keyframes pulse {
+
+			0%,
+			100% {
+				opacity: 1;
+			}
+
+			50% {
+				opacity: 0.5;
+			}
+		}
+
+		    body {
+					font-family: 'Montserrat', sans-serif;
+    background-color: #f8fafc;
+    min-height: 100vh;
+    color: #0f172a;
+	}
+
+		.skeleton {
+			animation: pulse 1.5s ease-in-out infinite;
+			background-color: #e5e7eb;
+			border-radius: 0.25rem;
+		}
+
+		.product-card {
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+		}
+
+		.product-card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+		}
+
+		.thumbnail-active {
+			border-color: #3b82f6 !important;
+			transform: scale(1.05);
+		}
+
+		.price-badge {
+			position: absolute;
+			top: 28px;
+			right: 0;
+			background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+			color: white;
+			padding: 4px 8px;
+			border-radius: 20px;
+			font-size: 20px;
+			font-weight: 600;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			transform: rotate(45deg);
+		}
+
+		.rating-badge {
+			background: rgba(255, 255, 255, 0.9);
+			backdrop-filter: blur(4px);
+			padding: 4px 8px;
+			border-radius: 20px;
+			font-size: 12px;
+			font-weight: 600;
+			display: inline-flex;
+			align-items: center;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+		}
+
+		.specs-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+			gap: 12px;
+		}
+
+		.spec-item {
+			background: rgba(249, 250, 251, 0.7);
+			border-radius: 8px;
+			padding: 12px;
+			transition: all 0.2s ease;
+		}
+
+		.spec-item:hover {
+			background: rgba(243, 244, 246, 0.9);
+			transform: translateY(-2px);
+		}
+
+		@media (max-width: 768px) {
+			.specs-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+	</style>
+</head>
+
+<body class="bg-gray-50">
+	<div class="container mx-auto px-4 py-8">
+		<div class="max-w-7xl mx-auto">
+			<!-- Product Quick View Section -->
+			<section id="product-view" class="bg-white rounded-2xl overflow-hidden shadow-xl">
+				<!-- Loading State -->
+				<div id="loading-state" class="p-6">
+					<div class="flex flex-col lg:flex-row gap-8">
+						<!-- Product Images - Skeleton -->
+						<div class="lg:w-1/2">
+							<div class="relative overflow-hidden rounded-xl mb-4" style="padding-top: 100%;">
+								<div class="skeleton absolute inset-0 w-full h-full"></div>
+							</div>
+							<div class="grid grid-cols-4 gap-3">
+								<div class="cursor-pointer rounded-lg overflow-hidden skeleton h-20"></div>
+								<div class="cursor-pointer rounded-lg overflow-hidden skeleton h-20"></div>
+								<div class="cursor-pointer rounded-lg overflow-hidden skeleton h-20"></div>
+								<div class="cursor-pointer rounded-lg overflow-hidden skeleton h-20"></div>
+							</div>
+						</div>
+
+						<!-- Product Details - Skeleton -->
+						<div class="lg:w-1/2">
+							<div class="flex justify-between items-start mb-4">
+								<div class="skeleton h-8 w-3/4"></div>
+								<div class="skeleton h-6 w-16"></div>
+							</div>
+
+							<div class="skeleton h-4 w-1/2 mb-4"></div>
+
+							<div class="flex items-center mb-4">
+								<div class="flex mr-2">
+									<div class="skeleton h-4 w-4 rounded-full mr-1"></div>
+									<div class="skeleton h-4 w-4 rounded-full mr-1"></div>
+									<div class="skeleton h-4 w-4 rounded-full mr-1"></div>
+									<div class="skeleton h-4 w-4 rounded-full mr-1"></div>
+									<div class="skeleton h-4 w-4 rounded-full mr-1"></div>
+								</div>
+								<div class="skeleton h-4 w-16"></div>
+							</div>
+
+							<div class="mb-6 flex items-center">
+								<div class="skeleton h-8 w-20 mr-2"></div>
+								<div class="skeleton h-6 w-16 mr-2"></div>
+								<div class="skeleton h-6 w-16"></div>
+							</div>
+
+							<div class="mb-6">
+								<div class="skeleton h-5 w-32 mb-2"></div>
+								<div class="skeleton h-4 w-full mb-1"></div>
+								<div class="skeleton h-4 w-4/5 mb-1"></div>
+								<div class="skeleton h-4 w-3/4"></div>
+							</div>
+
+							<div class="mb-6">
+								<div class="skeleton h-5 w-32 mb-2"></div>
+								<div class="space-y-1">
+									<div class="skeleton h-4 w-full"></div>
+									<div class="skeleton h-4 w-full"></div>
+									<div class="skeleton h-4 w-full"></div>
+									<div class="skeleton h-4 w-full"></div>
+									<div class="skeleton h-4 w-full"></div>
+									<div class="skeleton h-4 w-full"></div>
+									<div class="skeleton h-4 w-full"></div>
+								</div>
+							</div>
+
+							<div class="flex space-x-4">
+								<div class="skeleton h-12 w-32 rounded-lg"></div>
+								<div class="skeleton h-12 flex-1 rounded-lg"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Loaded Content (hidden initially) -->
+				<div id="loaded-content" class="hidden"></div>
+			</section>
+		</div>
+	</div>
+
+	<script>
+		let productData = ''
+
+		async function fetchData() {
+			const urlParams = new URLSearchParams(window.location.search);
+			const id = urlParams.get('id')
+
+			productData = await fetch(`https://dummyjson.com/products/${id}`)
+				.then(res => res.json());
+
+			loadedData(productData)
+		}
+
+
+		function loadedData(product) {
+			return `<div class="p-8">
+                        <div class="flex flex-col lg:flex-row gap-8">
+
+                            <!-- Product Images -->
+                            <div class="lg:w-1/2">
+                                <div class="relative overflow-hidden rounded-2xl mb-4" style="padding-top: 100%; background: #f8fafc;"> 
+                                    <div class="price-badge">${product.discountPercentage}% OFF</div>
+                                    <img id="main-product-image" src=${product.images[0]} alt="${product.title} Lash Princess" class="absolute inset-0 w-full h-full object-contain p-8"> 
+                                </div>
+                                <div class="grid grid-cols-4 gap-3">
+                                  ${product.images.map(prImg =>
+
+				`<div class="cursor-pointer border-2 border-gray-200 hover:border-blue-400 rounded-lg overflow-hidden transition-all duration-200 thumbnail" data-image=${prImg}>
+                                      <img src=${prImg} alt="${product.title}" class="w-full h-20 object-contain bg-gray-50 p-2"> 
+                                  </div>`
+			).join('')}
+                                </div> 
+                            </div> 
+                            
+                            <!-- Product Details -->
+                            <div class="lg:w-1/2">
+                                <div class="flex justify-between items-start mb-2">
+                                    <h1 class="text-3xl font-bold text-gray-900">${product.title}</h1>
+                                    <span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded-full font-medium flex items-center">
+                                        <i class="fas fa-check-circle mr-1"></i> ${product.availabilityStatus}
+                                    </span>
+                                </div>
+                                
+                                <div class="text-sm text-gray-500 mb-4 flex items-center">
+                                    <span>Brand: <span class="font-medium text-gray-700">${product.brand ?? 'others'}</span></span>
+                                    <span class="mx-2">•</span>
+                                    <span>SKU: <span class="font-medium text-gray-700">${product.sku}</span></span>
+                                    <span class="mx-2">•</span>
+                                    <span class="flex items-center">
+                                        <i class="fas fa-eye mr-1 text-gray-400"></i> ${Math.floor(Math.random() * 100)} views
+                                    </span>
+                                </div>
+                                
+                                <div class="flex items-center mb-4">
+                                    <div class="flex text-yellow-400 mr-2">
+                                        ${createStarRating(product.rating)}
+                                    </div>
+                                    <span class="text-sm text-gray-500 mr-3">${product.reviews.length} reviews</span>
+                                    <a href="#reviews" class="text-sm text-blue-500 hover:underline">Write a review</a>
+                                </div>
+                                
+                                <div class="mb-6"> 
+                                    <div class="flex items-center">
+                                        <span class="text-3xl font-bold text-gray-900">$${(product.price - (product.price * product.discountPercentage) / 100).toFixed(2)}</span>
+                                        <span class="text-lg line-through text-gray-400 ml-3">$${product.price}</span>
+                                        <span class="bg-red-100 text-red-800 text-xs font-medium ml-3 px-2 py-1 rounded">${product.discountPercentage}%off</span>
+                                    </div>
+                                    <div class="text-sm text-gray-500 mt-1 flex items-center">
+                                        <i class="fas fa-shipping-fast mr-1 text-green-500"></i>
+                                        <span>Free shipping on orders over $25</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-8">
+                                    <h3 class="font-medium text-lg mb-3 text-gray-900">Description</h3>
+                                    <p class="text-gray-600">
+                                        ${product.description}
+                                    </p>
+                                </div>
+                                
+                                <div class="mb-8">
+                                    <h3 class="font-medium text-lg mb-3 text-gray-900">Specifications</h3>
+                                    <div class="specs-grid">
+                                        <div class="spec-item">
+                                            <h4 class="text-xs font-medium text-gray-500 mb-1">Category</h4>
+                                            <p class="text-sm font-medium">${product.tags.map(prTag =>
+				`${prTag}`
+			).join(', ')}</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h4 class="text-xs font-medium text-gray-500 mb-1">Weight</h4>
+                                            <p class="text-sm font-medium">${product.weight} oz</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h4 class="text-xs font-medium text-gray-500 mb-1">Dimensions</h4>
+                                            <p class="text-sm font-medium">
+                                            ${Object.values(product.dimensions).map(prDim => `${prDim}"`).join(' x')}
+                                            </p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h4 class="text-xs font-medium text-gray-500 mb-1">Warranty</h4>
+                                            <p class="text-sm font-medium">1 week</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h4 class="text-xs font-medium text-gray-500 mb-1">Shipping</h4>
+                                            <p class="text-sm font-medium">3-5 business days</p>
+                                        </div>
+                                        <div class="spec-item">
+                                            <h4 class="text-xs font-medium text-gray-500 mb-1">${product.returnPolicy}</h4>
+                                            <p class="text-sm font-medium">No returns</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex flex-col sm:flex-row gap-4 mb-6 items-center">
+                                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden w-full sm:w-auto">
+                                        <button class="px-4 py-3 text-lg text-gray-600 hover:bg-gray-50 transition">-</button> 
+                                        <span class="px-4 py-2 text-center w-12">1</span> 
+                                        <button class="px-4 py-3 text-lg text-gray-600 hover:bg-gray-50 transition">+</button> 
+                                    </div> 
+                                    <button class="add-to-cart flex-1 py-3 rounded-lg hover:bg-[#6366f1] hover:text-white transition flex items-center justify-center shadow-md">
+                                        <i class="fas fa-shopping-cart mr-2"></i> 
+                                        <span>Add to Cart</span> 
+                                    </button>
+                                    <button class="wishlist w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-[#6366f1] hover:text-white text-gray-700 transition">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                </div>
+                                
+                                <div class="text-sm text-gray-500 flex flex-wrap items-center gap-2">
+                                    <span class="flex items-center">
+                                        <i class="fas fa-shield-alt mr-1 text-gray-400"></i>
+                                        <span>Secure checkout</span>
+                                    </span>
+                                    <span>•</span>
+                                    <span class="flex items-center">
+                                        <i class="fas fa-barcode mr-1 text-gray-400"></i>
+                                        <span>${product["meta"]["barcode"]}</span>
+                                    </span>
+                                    <span>•</span>
+                                    <a href="#" class="text-blue-500 hover:underline flex items-center">
+                                        <i class="fas fa-qrcode mr-1"></i>
+                                        <span>${product["meta"]["qrCode"]}</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Sections -->
+                        <div class="mt-12 pt-8 border-t border-gray-100">
+                            <!-- Reviews Section -->
+                            <div id="reviews" class="mb-12">
+                                <h2 class="text-2xl font-bold text-gray-900 mb-6">Customer Reviews</h2>
+                                
+                                <div class="bg-gray-50 rounded-xl p-6 mb-6">
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+                                        <div>
+                                            <div class="flex items-center mb-2">
+                                                <div class="flex text-yellow-400 mr-3 text-xl">
+                                                    ${createStarRating(product.rating)}
+                                                </div>
+                                                <span class="text-gray-700 font-medium">${product.rating} out of 5</span>
+                                            </div>
+                                            <p class="text-gray-500 text-sm">${product.reviews.length} global ratings</p>
+                                        </div>
+                                        <button class="mt-4 md:mt-0 bg-[#6366f1] text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition flex items-center">
+                                            <i class="fas fa-pen mr-2"></i>
+                                            Write a review
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="space-y-6">
+                                      ${product.reviews.map(prReview =>
+
+				`<div class="bg-white p-5 rounded-lg shadow-sm">
+                                          <div class="flex justify-between items-start mb-3">
+                                              <div>
+                                                  <span class="font-medium text-gray-900">${prReview.reviewerName}</span>
+                                                  <h3 class="font-medium text-gray-600 mb-2">${prReview.reviewerEmail}</h3>
+                                                  <div class="flex items-center mt-1">
+                                                      <div class="flex text-sm mr-2">
+                                                          ${createStarRating(prReview.rating)}
+                                                      </div>
+                                                      <span class="text-xs text-gray-400">${formatDate(prReview.date)}</span>
+                                                  </div>
+                                              </div>
+                                              <div class="flex items-center text-gray-400 text-sm">
+                                                  <i class="fas fa-flag mr-1"></i>
+                                                  <span>Report</span>
+                                              </div>
+                                          </div>
+                                          <p class="text-gray-600 text-sm">
+                                              ${prReview.comment}
+                                          </p>
+                                          <div class="flex items-center mt-3 text-sm text-gray-500">
+                                              <i class="fas fa-thumbs-up mr-1"></i>
+                                              <span class="mr-3">${Math.floor(Math.random() * 6)}</span>
+                                              <i class="fas fa-thumbs-down mr-1"></i>
+                                              <span>${Math.floor(Math.random() * 3)}</span>
+                                          </div>
+                                      </div>`
+			).join('')}         
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+		}
+
+		function createStarRating(rating) {
+			const fullStars = Math.floor(rating);
+			const hasHalfStar = (rating - fullStars) >= 0.5;
+
+			let starContainer = ''
+
+			for (let i = 0; i < fullStars; i++) {
+				starContainer += '<i class="fas fa-star text-yellow-400"></i> '
+			}
+
+			if (hasHalfStar) {
+				starContainer += '<i class="fas fa-star-half-alt text-yellow-400"></i> '
+			}
+
+			const totalStars = 5;
+			const emptyStars = totalStars - fullStars - (hasHalfStar ? 1 : 0);
+
+			for (let i = 0; i < emptyStars; i++) {
+				starContainer += '<i class="fas fa-star text-gray-400"></i> '
+			}
+
+			return starContainer
+		}
+
+		function formatDate(datePara) {
+			const date = new Date(datePara);
+			const formattedDate = new Intl.DateTimeFormat('en-US', {
+				month: 'long',
+				day: 'numeric',
+				year: 'numeric'
+			}).format(date);
+
+			return formattedDate
+		}
+
+		document.addEventListener('DOMContentLoaded', function () {
+			fetchData()
+
+
+
+			const productView = document.getElementById('product-view');
+			// Simulate fetching product data
+			setTimeout(() => {
+				// Hide skeleton loader
+				document.getElementById('loading-state').classList.add('hidden');
+				// Show actual content
+				document.getElementById('loaded-content').classList.remove('hidden');
+				document.getElementById('loaded-content').innerHTML = loadedData(productData)
+
+				// Initialize thumbnail image switching
+				const thumbnails = document.querySelectorAll('.thumbnail');
+				const mainImage = document.getElementById('main-product-image');
+
+				thumbnails.forEach(thumb => {
+					thumb.addEventListener('click', function () {
+						// Remove active class from all thumbnails
+						thumbnails.forEach(t => t.classList.remove('thumbnail-active', 'border-blue-400'));
+						// Add active class to clicked thumbnail
+						this.classList.add('thumbnail-active', 'border-blue-400');
+						// Change main image
+						const newImage = this.getAttribute('data-image');
+						mainImage.src = newImage;
+					});
+				});
+
+				// Set first thumbnail as active by default
+				if (thumbnails.length > 0) {
+					thumbnails[0].classList.add('thumbnail-active', 'border-blue-400');
+				}
+
+				// Quantity selector functionality
+				const minusBtn = document.querySelector('.add-to-cart').parentElement.querySelector('button:first-child');
+				const plusBtn = document.querySelector('.add-to-cart').parentElement.querySelector('button:last-child');
+				const quantityDisplay = document.querySelector('.add-to-cart').parentElement.querySelector('span');
+
+				let quantity = 1;
+
+				minusBtn.addEventListener('click', function () {
+					if (quantity > 1) {
+						quantity--;
+						quantityDisplay.textContent = quantity;
+					}
+				});
+
+				plusBtn.addEventListener('click', function () {
+					quantity++;
+					quantityDisplay.textContent = quantity;
+				});
+
+			}, 1500); // Simulate 1.5 second loading time
+		});
+	</script>
+</body>
+
+</html>

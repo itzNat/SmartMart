@@ -1,0 +1,315 @@
+
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #f8fafc;
+      min-height: 100vh;
+      color: #0f172a;
+    }
+
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .glass-dark {
+      background: rgba(15, 23, 42, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+      .custom-tag-select .options {
+    max-height: 0;
+    transition: max-height 0.2s ease-out, opacity 0.1s ease-out;
+    opacity: 0;
+  }
+  
+  .custom-tag-select.active .options {
+    max-height: 200px;
+    opacity: 1;
+    display: block;
+    scrollbar-width: thin;
+  }
+  
+  .custom-tag-select.active .selected-option svg {
+    transform: rotate(180deg);
+  }
+  
+  .custom-tag-select .option.active svg {
+    display: block !important;
+  }
+
+ .custom-category-select .options {
+    max-height: 0;
+    transition: max-height 0.2s ease-out, opacity 0.1s ease-out;
+    opacity: 0;
+  }
+  
+  .custom-category-select.active .options {
+    max-height: 200px;
+    opacity: 1;
+    display: block;
+  }
+  
+  .custom-category-select.active .selected-option svg {
+    transform: rotate(180deg);
+  }
+  
+  .option.active svg {
+    display: block !important;
+  }
+
+    .sidebar-item {
+      transition: all 0.3s ease;
+      width: 60px;
+      overflow: hidden;
+    }
+
+    .sidebar-item:hover {
+      width: 200px;
+    }
+
+    .sidebar-item.active {
+      background: rgba(99, 102, 241, 0.1);
+      border-left: 3px solid #6366f1;
+    }
+
+    .product-card {
+      transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-sidebar {
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    .cart-sidebar.open {
+      transform: translateX(0);
+    }
+    
+    #cart-items{
+      scrollbar-width: thin;
+    }
+
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #6366f1;
+      opacity: 0;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .bounce {
+      animation: bounce 0.5s;
+    }
+
+    .shake {
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      20%, 60% {
+        transform: translateX(-5px);
+      }
+      40%, 80% {
+        transform: translateX(5px);
+      }
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.1) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    .modal {
+      transition: all 0.3s ease;
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .modal.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* List view styles */
+    .products-list-view {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .products-list-view .product-card {
+      display: flex !important;
+      flex-direction: row;
+      width: 100%;
+    }
+
+    .products-list-view .product-card > div:first-child {
+      width: 200px;
+      min-width: 200px;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .products-list-view .product-card > div:last-child {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .products-list-view .product-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
+    .products-list-view .product-card:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Quick view button positioning for list view */
+    .products-list-view .quick-view-btn {
+      top: 50%;
+      transform: translateY(-50%);
+      bottom: auto;
+    }
+
+    .active-view {
+      background-color: rgba(99, 102, 241, 0.2) !important;
+      color: #6366f1 !important;
+    }
+    
+    /* New color scheme */
+    .text-primary {
+      color: #6366f1;
+    }
+    
+    .bg-primary {
+      background-color: #6366f1;
+    }
+    
+    .hover\:bg-primary:hover {
+      background-color: #6366f1;
+    }
+    
+    .border-primary {
+      border-color: #6366f1;
+    }
+    
+    .from-primary {
+      --tw-gradient-from: #6366f1;
+      --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(99, 102, 241, 0));
+    }
+    
+    .to-secondary {
+      --tw-gradient-to: #f43f5e;
+    }
+    
+    .bg-gradient-primary {
+      background-image: linear-gradient(to right, #6366f1, #f43f5e);
+    }
+    
+    /* Category specific colors */
+    .category-fashion {
+      background-color: #f5f3ff;
+    }
+    
+    .category-electronics {
+      background-color: #eef2ff;
+    }
+    
+    .category-shoes {
+      background-color: #f0f9ff;
+    }
+    
+    .category-home {
+      background-color: #f0fdf4;
+    }
+    
+    .category-beauty {
+      background-color: #fdf2f8;
+    }
+    
+    .category-jewelry {
+      background-color: #faf5ff;
+    }
+    
+    @media screen and (min-width: 1024px) {
+      .sidebar-item {
+        width: 200px;
+      }
+    }
+    
+    /* New button styles */
+    .btn-primary {
+      background-color: #6366f1;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+      background-color: #4f46e5;
+    }
+    
+    .btn-secondary {
+      background-color: #f43f5e;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #e11d48;
+    }
+    
+    /* Dark mode elements */
+    .text-dark {
+      color: #0f172a;
+    }
+    
+    .bg-dark {
+      background-color: #0f172a;
+    }
+    
+    .hover\:bg-dark:hover {
+      background-color: #1e293b;
+    }

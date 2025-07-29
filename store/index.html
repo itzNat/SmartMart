@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartMart | Premium Online Store</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="relative overflow-x-hidden"> 
+  <!-- Header -->
+  <header class="glass fixed top-0 left-0 right-0 z-50 py-4 px-6 flex items-center justify-between">
+    <div class="flex items-center space-x-8">
+      <div class="text-2xl font-bold text-primary">SmartMart</div> 
+      <!-- Search Bar -->
+      <div class="hidden md:flex items-center glass px-4 py-2 rounded-full"> 
+        <i class="fas fa-search text-gray-500 mr-2"></i> 
+        <input type="text" id="search-input" placeholder="Search for premium products..."
+          class="bg-transparent outline-none w-64 text-sm placeholder-gray-500"> 
+      </div>
+    </div>
+    <div class="flex items-center space-x-6"> 
+      <button class="relative" id="wishlist-btn"> 
+        <i class="fas fa-heart text-xl text-gray-700 hover:text-primary transition"></i> 
+        <span id="wishlist-count"
+          class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+      </button> 
+      <button id="cart-btn" class="relative"> 
+        <i class="fas fa-shopping-bag text-xl text-gray-700 hover:text-primary transition"></i> 
+        <span id="cart-count"
+          class="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+      </button>
+      <div class="hidden md:flex items-center space-x-2 cursor-pointer">
+        <div
+          class="w-8 h-8 rounded-full bg-gradient-primary flex items-center justify-center text-white">
+          <i class="fas fa-user text-sm"></i> 
+        </div> 
+        <span class="text-sm font-medium">Account</span>
+      </div>
+    </div>
+  </header> 
+  <!-- Mobile Search -->
+  <div class="glass md:hidden mt-20 mx-4 mb-4 flex items-center px-4 py-2 rounded-full"> 
+    <i class="fas fa-search text-gray-500 mr-2"></i> 
+    <input type="text" id="mobile-search-input" placeholder="Search..."
+      class="bg-transparent outline-none w-full text-sm placeholder-gray-500"> 
+  </div> 
+  <!-- Main Content -->
+  <main class="flex md:pt-24 pb-10 px-4"> 
+    <!-- Sidebar -->
+    <aside class="hidden md:block w-16 lg:w-52 mr-6">
+      <div class="glass rounded-xl p-2 sticky top-20 pt-6 overflow-hidden">
+        <h3 class="text-sm font-semibold text-gray-700 mb-4 px-2 hidden lg:block">Categories</h3>
+        <ul class="space-y-2">
+          <li class="sidebar-item active rounded-lg flex items-center p-2 cursor-pointer" data-category="all"> 
+            <span class="text-xl w-8">🛍️</span> 
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">All Products</span>
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="fashion"> 
+            <span class="text-xl w-8">👗</span> 
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Fashion</span>
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="groceries"> 
+            <span class="text-xl w-8">👟</span> 
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Groceries</span>
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="vehicle"> 
+            <span class="text-xl w-8">🚗</span> 
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Vehicle</span>
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="kitchen"> 
+            <span class="text-xl w-8">🔪</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Kitchen</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="home"> 
+            <span class="text-xl w-8">🏠</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Home Decor</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="beauty"> 
+            <span class="text-xl w-8">💄</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Beauty</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="smartphones"> 
+            <span class="text-xl w-8">📱</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Phones</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="laptops"> 
+            <span class="text-xl w-8">💻</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Laptops</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="sports"> 
+            <span class="text-xl w-8">⚽</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Sports</span> 
+          </li>
+        </ul>
+      </div>
+    </aside> 
+    <!-- Product Grid -->
+    <div class="flex-1"> 
+      <!-- Filter/Sort Bar -->
+      <div class="glass rounded-xl p-4 mb-6 flex flex-col md:flex-row md:items-center justify-between relative z-20">
+        <div class="mb-4 md:mb-0"> 
+  
+          <select id="tag-filter" class="hidden absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+            <!-- Options will be added dynamically -->
+          </select>
+          
+          <!-- Custom styled dropdown -->
+           <div class="flex gap-1 items-center">
+            <label class="text-sm font-medium text-gray-700 mr-2">Tag:</label> 
+          <div class="custom-tag-select relative">
+            <div
+              class="w-32 selected-option flex items-center justify-between bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg px-4 py-2 text-sm text-dark-800 cursor-pointer hover:bg-gray-50 transition-colors">
+              <span class="selected-text">All Tags</span>
+              <svg class="w-4 h-4 text-dark-500 transform transition-transform" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          
+            <div
+              class="options hidden absolute z-40 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-y-auto">
+              <!-- Options will be added dynamically -->
+            </div>
+          </div>
+           </div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <div> 
+            
+            <select id="sort-by" class="absolute hidden inset-0 w-full h-full opacity-0 cursor-pointer">
+    <!-- Options will be added dynamically -->
+  </select>
+
+<!-- Custom styled dropdown -->
+ <div class="flex items-center gap-1">
+  <label class="text-sm font-medium text-gray-700 mr-2">Sort by:</label> 
+  <div class="custom-category-select relative">
+    <div class="w-48 selected-option flex items-center justify-between bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg px-4 py-2 text-sm text-dark-800 cursor-pointer hover:bg-gray-50 transition-colors">
+      <span class="selected-text">Featured</span>
+      <svg class="w-4 h-4 text-dark-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </div>
+    
+    <div class="options hidden absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
+      <!-- Options will be added dynamically -->
+    </div>
+  </div>
+ </div>
+
+          </div>
+          <div class="hidden md:flex items-center space-x-2"> 
+            <button id="grid-view" class="p-1 rounded-lg glass-dark active-view">
+              <i class="fas fa-th-large text-sm"></i> 
+            </button> 
+            <button id="list-view" class="p-1 rounded-lg glass-dark">
+              <i class="fas fa-th-list text-sm"></i> 
+            </button> 
+          </div>
+        </div>
+      </div> 
+      <!-- Products Container -->
+      <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- Products will be loaded here dynamically -->
+      </div> 
+      <!-- Pagination -->
+      <div class="glass rounded-xl p-4 mt-6 flex justify-center" id="pagination-wrapper">
+        <nav class="flex items-center space-x-2" id="pagination">
+          <!-- Pagination will be loaded here dynamically -->
+        </nav>
+      </div>
+    </div>
+  </main> 
+  <!-- Cart Sidebar -->
+  <div id="cart-sidebar" class="cart-sidebar fixed top-0 right-0 bottom-0 w-full md:w-96 z-50 overflow-y-auto">
+    <div class="glass h-full p-6 flex flex-col">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Your Cart</h2> 
+        <button id="close-cart" class="text-gray-500 hover:text-primary">
+          <i class="fas fa-times"></i> 
+        </button>
+      </div>
+      <div id="cart-items" class="flex-1 overflow-y-auto"> 
+        <!-- Empty State -->
+        <div id="empty-cart" class="flex flex-col items-center justify-center h-full text-center">
+          <div class="w-40 h-40 mb-4 relative">
+            <div class="absolute inset-0 bg-indigo-100 rounded-full animate-pulse"></div> 
+            <i class="fas fa-shopping-bag text-5xl text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+          </div>
+          <h3 class="text-lg font-medium mb-2">Your cart is empty</h3>
+          <p class="text-gray-500 mb-4">Start shopping to add items to your cart</p> 
+          <button id="close-cart-continue"
+            class="px-6 py-2 btn-primary rounded-full transition"> Continue Shopping
+          </button>
+        </div> 
+        <!-- Full State -->
+         <div id="full-cart"></div>
+      </div> 
+      <!-- Cart Summary (hidden when empty) -->
+      <div id="cart-summary" class="hidden">
+        <div class="border-t border-gray-200 pt-4 mb-4">
+          <div class="flex justify-between mb-2"> <span>Subtotal</span> <span id="cart-subtotal">$0.00</span> </div>
+          <div class="flex justify-between mb-2"> <span>Shipping</span> <span id="cart-shipping">Free Shipping</span> </div>
+          <div class="flex justify-between font-bold text-lg"> <span>Total</span> <span id="cart-total">$0.00</span>
+          </div>
+        </div>
+        
+        <button id="checkout-btn"
+          class="w-full bg-dark text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition flex items-center justify-center">
+          <span>Proceed to Checkout</span> <i class="fas fa-arrow-right ml-2"></i> 
+        </button>
+      </div>
+    </div>
+  </div> 
+  <!-- Wishlist Sidebar -->
+  <div id="wishlist-sidebar" class="cart-sidebar fixed top-0 right-0 bottom-0 w-full md:w-96 z-50 overflow-y-auto">
+    <div class="glass h-full p-6 flex flex-col">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-bold">Your Wishlist</h2> 
+        <button id="close-wishlist" class="text-gray-500 hover:text-primary">
+          <i class="fas fa-times"></i> 
+        </button>
+      </div>
+      <div id="wishlist-items" class="flex-1 overflow-y-auto"> 
+        <!-- Empty State -->
+        <div id="empty-wishlist" class="flex flex-col items-center justify-center h-full text-center">
+          <div class="w-40 h-40 mb-4 relative">
+            <div class="absolute inset-0 bg-indigo-100 rounded-full animate-pulse"></div> 
+            <i class="fas fa-heart text-5xl text-primary absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+          </div>
+          <h3 class="text-lg font-medium mb-2">Your wishlist is empty</h3>
+          <p class="text-gray-500 mb-4">Save your favorite items here</p> 
+          <button id="close-wishlist-continue"
+            class="px-6 py-2 btn-primary rounded-full hover:bg-indigo-600 transition"> Continue Shopping
+          </button>
+        </div> 
+        <!-- Full State -->
+        <div id="full-wishlist"></div>
+      </div> 
+      <!-- Wishlist Summary -->
+      <div id="wishlist-summary" class="hidden">
+        <button id="wishlist-to-cart" class="w-full btn-secondary py-3 rounded-lg font-medium hover:bg-rose-600 transition">
+          Add All to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+  
+    <!-- Checkout Modal -->
+  <div id="checkout-modal" class="modal fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="glass rounded-xl p-6 w-full max-w-md mx-4">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold">Checkout</h3>
+        <button id="close-checkout-modal" class="text-gray-500 hover:text-primary">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="checkout-form">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Email</label>
+          <input type="email" id="checkout-email" class="w-full px-4 py-2 rounded-lg glass-dark" placeholder="your@email.com" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Shipping Address</label>
+          <textarea id="checkout-address" class="w-full px-4 py-2 rounded-lg glass-dark" rows="3" placeholder="123 Main St, City, Country" required></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Payment Method</label>
+          <div class="flex space-x-2">
+            <button class="payment-method flex-1 py-2 rounded-lg glass-dark" data-method="credit">
+              <i class="fab fa-cc-visa mr-2"></i> Credit Card
+            </button>
+            <button class="payment-method flex-1 py-2 rounded-lg glass-dark" data-method="paypal">
+              <i class="fab fa-cc-paypal mr-2"></i> PayPal
+            </button>
+          </div>
+        </div>
+        <div id="credit-card-fields" class="hidden">
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">Card Number</label>
+              <input type="text" id="card-number" class="w-full px-4 py-2 rounded-lg glass-dark" placeholder="1234 5678 9012 3456">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Expiry</label>
+              <input type="text" id="card-expiry" class="w-full px-4 py-2 rounded-lg glass-dark" placeholder="MM/YY">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">CVV</label>
+              <input type="text" id="card-cvv" class="w-full px-4 py-2 rounded-lg glass-dark" placeholder="123">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Name on Card</label>
+              <input type="text" id="card-name" class="w-full px-4 py-2 rounded-lg glass-dark" placeholder="John Doe">
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-gray-200 pt-4 mb-4">
+          <div class="flex justify-between mb-2">
+            <span>Subtotal</span>
+            <span id="checkout-subtotal">$0.00</span>
+          </div>
+          <div class="flex justify-between mb-2">
+            <span>Shipping</span>
+            <span>Free</span>
+          </div>
+          <div class="flex justify-between font-bold text-lg">
+            <span>Total</span>
+            <span id="checkout-total">$0.00</span>
+          </div>
+        </div>
+        <button id="place-order-btn" class="w-full btn-primary py-3 rounded-lg font-medium hover:bg-indigo-600 transition">
+          Place Order
+        </button>
+      </div>
+      <div id="checkout-success" class="hidden text-center py-8">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-check text-3xl text-green-500"></i>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Order Placed Successfully!</h3>
+        <p class="text-gray-600 mb-6">Thank you for your purchase. Your order has been confirmed.</p>
+        <button id="continue-shopping-btn" class="px-6 py-2 btn-primary rounded-full hover:bg-indigo-600 transition">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- Confetti Container -->
+  <div id="confetti-container" class="fixed inset-0 pointer-events-none z-50 overflow-hidden"></div>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
