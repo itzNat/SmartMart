@@ -49,7 +49,7 @@
       class="bg-transparent outline-none w-full text-sm placeholder-gray-500"> 
   </div> 
   <!-- Main Content -->
-  <main class="flex md:pt-24 pb-10 px-4"> 
+  <main class="flex md:pt-24 pb-10 px-4">
     <!-- Sidebar -->
     <aside class="hidden md:block w-16 lg:w-52 mr-6">
       <div class="glass rounded-xl p-2 sticky top-20 pt-6 overflow-hidden">
@@ -99,7 +99,54 @@
       </div>
     </aside> 
     <!-- Product Grid -->
-    <div class="flex-1"> 
+    <div class="flex-1 relative"> 
+          <nav class="block md:hidden mb-4">
+      <div class="glass rounded-xl p-2 sticky top-20 overflow-hidden">
+        <h3 class="text-sm font-semibold text-gray-700 mb-4 px-2 hidden lg:block">Categories</h3>
+        <ul class="space-y-2 flex flex-wrap items-center justify-center">
+          <li class="sidebar-item active rounded-lg flex items-center p-2 cursor-pointer" data-category="all"> 
+            <span class="text-xl w-8">🛍️</span> 
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">All Products</span>
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="fashion"> 
+            <span class="text-xl w-8">👗</span> 
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Fashion</span>
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="groceries"> 
+            <span class="text-xl w-8">👟</span> 
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Groceries</span>
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="vehicle"> 
+            <span class="text-xl w-8">🚗</span> 
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Vehicle</span>
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="kitchen"> 
+            <span class="text-xl w-8">🔪</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Kitchen</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="home"> 
+            <span class="text-xl w-8">🏠</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Home Decor</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="beauty"> 
+            <span class="text-xl w-8">💄</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Beauty</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="smartphones"> 
+            <span class="text-xl w-8">📱</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Phones</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="laptops"> 
+            <span class="text-xl w-8">💻</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Laptops</span> 
+          </li>
+          <li class="sidebar-item rounded-lg flex items-center p-2 cursor-pointer" data-category="sports"> 
+            <span class="text-xl w-8">⚽</span>
+            <span class="ml-2 text-sm whitespace-nowrap hidden lg:block">Sports</span> 
+          </li>
+        </ul>
+      </div>
+    </nav>
       <!-- Filter/Sort Bar -->
       <div class="glass rounded-xl p-4 mb-6 flex flex-col md:flex-row md:items-center justify-between relative z-20">
         <div class="mb-4 md:mb-0"> 

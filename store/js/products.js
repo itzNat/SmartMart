@@ -60,7 +60,7 @@ export class ProductsManager {
         filtered.sort((a, b) => b.rating - a.rating);
         break;
       case 'newest':
-        filtered.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+        filtered.sort((a, b) => new Date(b.meta.updatedAt) - new Date(a.meta.updatedAt));
         break;
       default: // 'featured' - no sorting or some custom logic
         break;

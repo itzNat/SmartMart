@@ -75,7 +75,7 @@
     }
 
     .sidebar-item:hover {
-      width: 200px;
+      background-color: #6365f10e;
     }
 
     .sidebar-item.active {
