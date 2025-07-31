@@ -3,21 +3,41 @@ export class CartManager {
     this.cart = [];
   }
 
-  addToCart(id, name, price, image) {
-    // Check if item already exists in cart
-    const existingItem = this.cart.find(item => item.id === id);
+  addToCart(id, title, price, image) {
     
+    const retrievedCartLS = localStorage.getItem('myStoredCart')
+    const retrievedCart = JSON.parse(retrievedCartLS)
+
+    console.log(retrievedCart)
+
+    retrievedCart != null ? this.cart = [...retrievedCart] : this.cart = []
+    console.log(retrievedCart)
+    
+    // Check if item already exists in cart
+      const existingItem = this.cart.find(item => item.id === id);
+      
+      console.log(retrievedCart, this.cart)
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      this.cart.push({ id, name, price: parseFloat(price), image, quantity: 1 });
+      this.cart.push({ id, title, price: parseFloat(price), image, quantity: 1 });
+      console.log(this.cart)
     }
+    
+    console.log(this.cart)
+    localStorage.setItem('myStoredCart', JSON.stringify(this.cart))
     
     this.updateCart();
     return this.cart;
   }
 
   updateCart() {
+    // localStorage.clear('myStoredCart')      
+    const retrievedCartLS = localStorage.getItem('myStoredCart')
+    const retrievedCart = JSON.parse(retrievedCartLS)
+
+    retrievedCart != null ? this.cart = [...retrievedCart] : this.cart = []
+
     const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
     document.getElementById('cart-count').textContent = totalItems;
     
@@ -43,11 +63,11 @@ export class CartManager {
         cartItem.className = 'flex items-center py-4 border-b border-gray-200';
         cartItem.innerHTML = `
           <div class="w-16 h-16 rounded-lg overflow-hidden mr-4">
-            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain">
+            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-contain">
           </div>
           <div class="flex-1">
-            <h3 class="font-medium">${item.name}</h3>
-            <p class="text-sm text-gray-500">$${item.price.toFixed(2)}</p>
+            <h3 class="font-medium">${item.title}</h3>
+            <p class="text-sm text-gray-500">$${Number(item.price).toFixed(2)}</p>
           </div>
           <div class="flex items-center">
             <button class="decrease-quantity w-6 h-6 rounded-full flex items-center justify-center hover:bg-gray-100 transition" data-id="${item.id}">
@@ -82,17 +102,27 @@ export class CartManager {
     
     // These would be added when cart items are rendered
     document.addEventListener('click', (e) => {
+      
+      const retrievedCartLS = localStorage.getItem('myStoredCart')
+      const retrievedCart = JSON.parse(retrievedCartLS)
+      this.cart = [...retrievedCart]
+      console.log(this.cart)
       if (e.target.closest('.increase-quantity')) {
+        
+
+        console.log('love')
         const id = e.target.closest('button').getAttribute('data-id');
         const item = this.cart.find(item => item.id === id);
         if (item) {
           item.quantity += 1;
-          this.updateCart();
+          
         }
       }
       
       if (e.target.closest('.decrease-quantity')) {
+        console.log('love')
         const id = e.target.closest('button').getAttribute('data-id');
+        console.log(typeof(id))
         const item = this.cart.find(item => item.id === id);
         if (item) {
           if (item.quantity > 1) {
@@ -100,15 +130,17 @@ export class CartManager {
           } else {
             this.cart = this.cart.filter(item => item.id !== id);
           }
-          this.updateCart();
         }
       }
       
       if (e.target.closest('.remove-item')) {
         const id = e.target.getAttribute('data-id');
         this.cart = this.cart.filter(item => item.id !== id);
-        this.updateCart();
       }
+
+      localStorage.setItem('myStoredCart', JSON.stringify(this.cart))
+      this.updateCart();
+
     });
   }
 

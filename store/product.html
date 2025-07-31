@@ -25,12 +25,12 @@
 			}
 		}
 
-		    body {
-					font-family: 'Montserrat', sans-serif;
-    background-color: #f8fafc;
-    min-height: 100vh;
-    color: #0f172a;
-	}
+		body {
+			font-family: 'Montserrat', sans-serif;
+			background-color: #f8fafc;
+			min-height: 100vh;
+			color: #0f172a;
+		}
 
 		.skeleton {
 			animation: pulse 1.5s ease-in-out infinite;
@@ -302,15 +302,15 @@
                                 
                                 <div class="flex flex-col sm:flex-row gap-4 mb-6 items-center">
                                     <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden w-full sm:w-auto">
-                                        <button class="px-4 py-3 text-lg text-gray-600 hover:bg-gray-50 transition">-</button> 
-                                        <span class="px-4 py-2 text-center w-12">1</span> 
-                                        <button class="px-4 py-3 text-lg text-gray-600 hover:bg-gray-50 transition">+</button> 
+                                        <button class="decrease-quantity px-4 py-3 text-lg text-gray-600 hover:bg-gray-50 transition">-</button> 
+                                        <span class="quantity-display px-4 py-2 text-center w-12">1</span> 
+                                        <button class="increase-quantity px-4 py-3 text-lg text-gray-600 hover:bg-gray-50 transition">+</button> 
                                     </div> 
                                     <button class="add-to-cart flex-1 py-3 rounded-lg hover:bg-[#6366f1] hover:text-white transition flex items-center justify-center shadow-md">
                                         <i class="fas fa-shopping-cart mr-2"></i> 
                                         <span>Add to Cart</span> 
                                     </button>
-                                    <button class="wishlist w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-[#6366f1] hover:text-white text-gray-700 transition">
+                                    <button class=" wishlist w-9 h-9 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-[#6366f1] hover:text-white text-gray-700 transition">
                                         <i class="fas fa-heart"></i>
                                     </button>
                                 </div>
@@ -467,22 +467,58 @@
 				}
 
 				// Quantity selector functionality
-				const minusBtn = document.querySelector('.add-to-cart').parentElement.querySelector('button:first-child');
-				const plusBtn = document.querySelector('.add-to-cart').parentElement.querySelector('button:last-child');
-				const quantityDisplay = document.querySelector('.add-to-cart').parentElement.querySelector('span');
+				const quantityDisplay = document.querySelector('.quantity-display')
 
 				let quantity = 1;
+				let cart = []
 
-				minusBtn.addEventListener('click', function () {
-					if (quantity > 1) {
-						quantity--;
-						quantityDisplay.textContent = quantity;
+				function addToCart() {
+
+					const retrievedCartLS = localStorage.getItem('myStoredCart')
+					const retrievedCart = JSON.parse(retrievedCartLS)
+
+					console.log(retrievedCart)
+
+					retrievedCart != null ? cart = [...retrievedCart] : cart = []
+					console.log(retrievedCart)
+
+					// Check if item already exists in cart
+					const existingItem = cart.find(item => item.id === productData.id);
+
+					console.log(retrievedCart, cart)
+					if (existingItem) {
+						existingItem.quantity += quantity;
+					} else {
+						cart.push({ id: productData.id, title: productData.title, price: parseFloat(productData.price), image: productData.images[0], quantity: quantity });
+						console.log(cart)
 					}
-				});
 
-				plusBtn.addEventListener('click', function () {
-					quantity++;
+					console.log(cart)
+					localStorage.setItem('myStoredCart', JSON.stringify(cart))
+
+				}
+
+				document.addEventListener('click', (e) => {
+
+					const id = e.target.closest('button').getAttribute('data-id');
+					if (e.target.closest('.increase-quantity')) {
+						quantity += 1;
+					}
+
+					if (e.target.closest('.decrease-quantity')) {
+						if (quantity > 1) {
+							quantity -= 1;
+						}
+					}
+
+					if (e.target.closest('.add-to-cart')) {
+						addToCart()
+					}
+					console.log(quantity)
+					console.log(cart)
+
 					quantityDisplay.textContent = quantity;
+
 				});
 
 			}, 1500); // Simulate 1.5 second loading time
