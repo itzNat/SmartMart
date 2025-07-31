@@ -253,6 +253,7 @@
                                         <span class="text-lg line-through text-gray-400 ml-3">$${product.price}</span>
                                         <span class="bg-red-100 text-red-800 text-xs font-medium ml-3 px-2 py-1 rounded">${product.discountPercentage}%off</span>
                                     </div>
+																		<h3 class="font-medium text-gray-600 mb-2">${product.stock ? `${product.stock} items left` : 'not available'}</h3>
                                     <div class="text-sm text-gray-500 mt-1 flex items-center">
                                         <i class="fas fa-shipping-fast mr-1 text-green-500"></i>
                                         <span>Free shipping on orders over $25</span>
@@ -300,8 +301,8 @@
                                     </div>
                                 </div>
                                 
-                                <div class="flex flex-col sm:flex-row gap-4 mb-6 items-center">
-                                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden w-full sm:w-auto">
+                                <div class="flex flex-row gap-4 mb-6 items-center">
+                                    <div class="flex items-center border border-gray-200 rounded-lg overflow-hidden sm:w-auto">
                                         <button class="decrease-quantity px-4 py-3 text-lg text-gray-600 hover:bg-gray-50 transition">-</button> 
                                         <span class="quantity-display px-4 py-2 text-center w-12">1</span> 
                                         <button class="increase-quantity px-4 py-3 text-lg text-gray-600 hover:bg-gray-50 transition">+</button> 
@@ -364,7 +365,6 @@
                                           <div class="flex justify-between items-start mb-3">
                                               <div>
                                                   <span class="font-medium text-gray-900">${prReview.reviewerName}</span>
-                                                  <h3 class="font-medium text-gray-600 mb-2">${prReview.reviewerEmail}</h3>
                                                   <div class="flex items-center mt-1">
                                                       <div class="flex text-sm mr-2">
                                                           ${createStarRating(prReview.rating)}
@@ -489,7 +489,7 @@
 					if (existingItem) {
 						existingItem.quantity += quantity;
 					} else {
-						cart.push({ id: productData.id, title: productData.title, price: parseFloat(productData.price), image: productData.images[0], quantity: quantity });
+						cart.push({ id: productData.id, title: productData.title, price: productData.price, image: productData.images[0], quantity: quantity });
 						console.log(cart)
 					}
 

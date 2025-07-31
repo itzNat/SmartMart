@@ -8,23 +8,17 @@ export class CartManager {
     const retrievedCartLS = localStorage.getItem('myStoredCart')
     const retrievedCart = JSON.parse(retrievedCartLS)
 
-    console.log(retrievedCart)
-
     retrievedCart != null ? this.cart = [...retrievedCart] : this.cart = []
-    console.log(retrievedCart)
     
     // Check if item already exists in cart
       const existingItem = this.cart.find(item => item.id === id);
-      
-      console.log(retrievedCart, this.cart)
+
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      this.cart.push({ id, title, price: parseFloat(price), image, quantity: 1 });
-      console.log(this.cart)
+      this.cart.push({id: parseFloat(id), title, price: parseFloat(price), image, quantity: 1 });
     }
-    
-    console.log(this.cart)
+
     localStorage.setItem('myStoredCart', JSON.stringify(this.cart))
     
     this.updateCart();
@@ -106,36 +100,31 @@ export class CartManager {
       const retrievedCartLS = localStorage.getItem('myStoredCart')
       const retrievedCart = JSON.parse(retrievedCartLS)
       this.cart = [...retrievedCart]
-      console.log(this.cart)
-      if (e.target.closest('.increase-quantity')) {
-        
 
-        console.log('love')
+      if (e.target.closest('.increase-quantity')) {
         const id = e.target.closest('button').getAttribute('data-id');
-        const item = this.cart.find(item => item.id === id);
+        const item = this.cart.find(item => item.id === parseFloat(id));
         if (item) {
           item.quantity += 1;
-          
         }
       }
       
       if (e.target.closest('.decrease-quantity')) {
-        console.log('love')
         const id = e.target.closest('button').getAttribute('data-id');
-        console.log(typeof(id))
-        const item = this.cart.find(item => item.id === id);
+
+        const item = this.cart.find(item => item.id === parseFloat(id));
         if (item) {
           if (item.quantity > 1) {
             item.quantity -= 1;
           } else {
-            this.cart = this.cart.filter(item => item.id !== id);
+            this.cart = this.cart.filter(item => item.id !== parseFloat(id));
           }
         }
       }
       
       if (e.target.closest('.remove-item')) {
         const id = e.target.getAttribute('data-id');
-        this.cart = this.cart.filter(item => item.id !== id);
+        this.cart = this.cart.filter(item => item.id !== parseFloat(id));
       }
 
       localStorage.setItem('myStoredCart', JSON.stringify(this.cart))

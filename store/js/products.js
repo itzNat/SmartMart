@@ -42,10 +42,12 @@ export class ProductsManager {
 
     // Apply search filter
     if (this.currentSearch) {
+      console.log(this.currentSearch)
       filtered = filtered.filter((product) => {
-        product.title.toLowerCase().includes(this.currentSearch) ||
-          product.description.toLowerCase().includes(this.currentSearch);
+        
+        return (product.title.toLowerCase().includes(this.currentSearch) || product.description.toLowerCase().includes(this.currentSearch));
       });
+      console.log(filtered)
     }
 
     // Apply sorting
